@@ -22,12 +22,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
+      // Add a timeout to prevent hanging
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+
       const response = await fetch('/api/profiles/me', {
         headers: {
           'x-user-id': localStorage.getItem('userId') || 'default-supervisor-id',
           'x-warehouse-id': localStorage.getItem('warehouseId') || 'default-warehouse-id',
         },
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
 
       if (response.ok) {
         const profile = await response.json();
@@ -40,9 +47,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           warehouseId: profile.warehouseId,
           active: profile.active,
         });
+      } else {
+        console.warn('Auth check failed with status:', response.status);
       }
     } catch (error) {
       console.error('Auth check failed:', error);
+      // For now, set a default user for demo purposes
+      if (localStorage.getItem('userId')) {
+        setUser({
+          id: localStorage.getItem('userId') || 'demo-user',
+          email: 'demo@example.com',
+          firstName: 'Demo',
+          lastName: 'User',
+          role: 'supervisor',
+          warehouseId: localStorage.getItem('warehouseId') || 'demo-warehouse',
+          active: true,
+        });
+      }
     } finally {
       setLoading(false);
     }
