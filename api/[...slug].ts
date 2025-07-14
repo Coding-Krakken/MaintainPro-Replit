@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import express from 'express';
 import { registerRoutes } from '../server/routes';
 
@@ -9,9 +8,9 @@ app.use(express.urlencoded({ extended: false }));
 // Register all routes
 registerRoutes(app);
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   return new Promise((resolve, reject) => {
-    app(req as any, res as any, (err: any) => {
+    app(req, res, (err: any) => {
       if (err) {
         reject(err);
       } else {
