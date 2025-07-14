@@ -1,0 +1,71 @@
+**ENTERPRISE CMMS DEVELOPMENT PROMPT**
+
+---
+
+## 🎯 PROJECT MISSION
+
+**Create a production-ready, enterprise-grade Computerized Maintenance Management System (CMMS) that transforms industrial maintenance operations through cutting-edge web technologies, intelligent automation, and mobile-first design.**
+
+**Success Criteria:**
+- Deploy intuitive, responsive interfaces that reduce task completion time by 40%
+- Enable real-time collaboration between technicians, managers, and external vendors
+- Implement comprehensive asset tracking with QR code integration and predictive analytics
+- Deliver actionable business intelligence through advanced reporting and KPI dashboards
+- Ensure 100% offline functionality for critical field operations with seamless sync
+
+---
+
+## 🏗️ CORE SYSTEM MODULES
+
+**Build 8 interconnected modules with real-time data synchronization:**
+
+1. **[Equipment & Asset Management](./EquipmentAssetModule.md)** - QR-enabled asset tracking with predictive analytics
+2. **[Work Order Management](./WorkOrderModule.md)** - Intelligent routing, mobile execution, auto-escalation
+3. **[Preventive Maintenance](./PreventiveMaintenanceModule.md)** - AI-driven scheduling with compliance tracking
+4. **[Parts & Inventory](./PartsInventoryModule.md)** - Smart reordering, vendor integration, multi-warehouse
+5. **[Vendor & Contractor Management](./VendorContractorModule.md)** - External workforce coordination
+6. **[User Roles & Permissions](./UserRolesPermissions.md)** - Multi-tenant security with warehouse isolation
+7. **[Reporting & Analytics](./ReportingDashboardsModule.md)** - Real-time KPIs, executive dashboards, audit trails
+8. **[System Configuration](./SystemConfigurationModule.md)** - Centralized settings, escalation rules, notifications
+
+---
+
+## � IMPLEMENTATION FRAMEWORK
+
+**Enterprise-grade architecture with comprehensive specifications:**
+
+**Core Technology:**
+- **[Technical Stack](./TechnicalStack.md)** - React 18+, TypeScript, Supabase, PWA architecture
+- **[Quality Standards](./QualityStandards.md)** - Performance SLAs, security baselines, accessibility compliance
+- **[API & Database](./APISpecification.md)** - Complete schema, RLS policies, real-time subscriptions
+
+**Development Excellence:**
+- **[Implementation Methodology](./ImplementationMethodology.md)** - Agile phases, MVP delivery, iterative enhancement
+- **[Development Workflow](./DevelopmentWorkflow.md)** - CI/CD automation, testing pyramid, code quality gates
+- **[Testing Strategy](./TestingStrategy.md)** - Unit/integration/E2E coverage, accessibility testing
+
+**Production Readiness:**
+- **[Security Framework](./SecurityErrorHandling.md)** - Zero-trust architecture, compliance, error handling
+- **[Deployment Infrastructure](./DeploymentInfrastructure.md)** - Cloud-native deployment, monitoring, scaling
+- **[Project Structure](./ProjectStructure.md)** - Domain-driven organization, modular architecture
+
+**Enterprise Features:**
+- **[Advanced Capabilities](./EnterpriseFeatures.md)** - Multi-tenancy, AI/ML, ERP integration, IoT connectivity
+- **[Data Governance](./AdvancedCapabilities.md)** - Master data management, sustainability tracking, ESG compliance
+
+---
+
+## � DEVELOPMENT EXCELLENCE
+
+**Execute with production-grade engineering practices:**
+
+**Architecture:** Domain-driven design, microservices patterns, event-driven architecture  
+**Code Quality:** TypeScript strict mode, 85%+ test coverage, zero-warning ESLint compliance  
+**User Experience:** Mobile-first responsive design, offline-capable PWA, WCAG 2.1 AA accessibility  
+**Performance:** <2s load times, <100ms API responses, Core Web Vitals optimization  
+**Security:** Zero-trust authentication, RLS data isolation, comprehensive audit logging  
+**Scalability:** Multi-tenant architecture, horizontal scaling, intelligent caching strategies
+
+**Deliver a world-class CMMS that sets the industry standard for maintenance management excellence.**
+
+
