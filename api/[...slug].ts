@@ -1,21 +1,55 @@
-import express from 'express';
-import { registerRoutes } from '../server/routes';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// Simple mock data for demo purposes
+const mockProfile = {
+  id: 'demo-user',
+  email: 'demo@maintainpro.com',
+  firstName: 'Demo',
+  lastName: 'User',
+  role: 'supervisor',
+  warehouseId: 'demo-warehouse',
+  active: true,
+};
 
-// Register all routes
-registerRoutes(app);
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  const { slug } = req.query;
+  const path = Array.isArray(slug) ? `/${slug.join('/')}` : `/${slug}`;
 
-export default async function handler(req: any, res: any) {
-  return new Promise((resolve, reject) => {
-    app(req, res, (err: any) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(undefined);
-      }
-    });
-  });
+  try {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-user-id, x-warehouse-id');
+
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+
+    // Handle API routes
+    if (path === '/profiles/me' || path.startsWith('/profiles/')) {
+      return res.status(200).json(mockProfile);
+    }
+
+    if (path.startsWith('/work-orders')) {
+      return res.status(200).json([]);
+    }
+
+    if (path.startsWith('/equipment')) {
+      return res.status(200).json([]);
+    }
+
+    if (path.startsWith('/parts')) {
+      return res.status(200).json([]);
+    }
+
+    if (path.startsWith('/notifications')) {
+      return res.status(200).json([]);
+    }
+
+    // Default response for unknown routes
+    return res.status(404).json({ message: 'API route not found' });
+  } catch (error) {
+    console.error('API Error:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 }

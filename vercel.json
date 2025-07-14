@@ -9,10 +9,15 @@
       }
     }
   ],
+  "functions": {
+    "api/[...slug].ts": {
+      "runtime": "@vercel/node@3"
+    }
+  },
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "/api/[...slug].ts"
+      "dest": "/api/[...slug]"
     },
     {
       "src": "/assets/(.*)",
