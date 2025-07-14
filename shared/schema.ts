@@ -182,48 +182,76 @@ export const systemLogs = pgTable("system_logs", {
 });
 
 // Schema exports for forms
-export const insertProfileSchema = createInsertSchema(profiles).omit({
+export const insertProfileSchema = createInsertSchema(profiles, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertWarehouseSchema = createInsertSchema(warehouses).omit({
+export const insertWarehouseSchema = createInsertSchema(warehouses, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertEquipmentSchema = createInsertSchema(equipment).omit({
+export const insertEquipmentSchema = createInsertSchema(equipment, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertWorkOrderSchema = createInsertSchema(workOrders).omit({
+export const insertWorkOrderSchema = createInsertSchema(workOrders, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+  updatedAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 });
 
-export const insertPartSchema = createInsertSchema(parts).omit({
+export const insertPartSchema = createInsertSchema(parts, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertVendorSchema = createInsertSchema(vendors).omit({
+export const insertVendorSchema = createInsertSchema(vendors, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertPmTemplateSchema = createInsertSchema(pmTemplates).omit({
+export const insertPmTemplateSchema = createInsertSchema(pmTemplates, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertNotificationSchema = createInsertSchema(notifications).omit({
+export const insertNotificationSchema = createInsertSchema(notifications, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });
 
-export const insertAttachmentSchema = createInsertSchema(attachments).omit({
+export const insertAttachmentSchema = createInsertSchema(attachments, {
+  id: () => z.string().optional(),
+  createdAt: () => z.date().optional(),
+}).omit({
   id: true,
   createdAt: true,
 });

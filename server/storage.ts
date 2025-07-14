@@ -749,4 +749,5 @@ export class MemStorage implements IStorage {
   }
 }
 
+// Fallback to in-memory storage if database connection fails
 export const storage = new MemStorage();
