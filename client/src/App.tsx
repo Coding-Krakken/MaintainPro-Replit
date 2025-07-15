@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import WorkOrders from "./pages/WorkOrders";
 import Equipment from "./pages/Equipment";
 import Inventory from "./pages/Inventory";
+import PreventiveMaintenance from "./pages/PreventiveMaintenance";
 import Auth from "./pages/Auth";
 import NotFound from "@/pages/not-found";
 
@@ -61,6 +62,11 @@ function AppRoutes() {
       <Route path="/inventory">
         <ProtectedRoute>
           <Inventory />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/preventive">
+        <ProtectedRoute>
+          <PreventiveMaintenance />
         </ProtectedRoute>
       </Route>
       <Route component={NotFound} />

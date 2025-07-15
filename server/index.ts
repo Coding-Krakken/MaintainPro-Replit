@@ -1,6 +1,7 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { pmScheduler } from "./services/pm-scheduler";
 
 const app = express();
 app.use(express.json());
@@ -63,5 +64,8 @@ app.use((req, res, next) => {
     host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
   }, () => {
     log(`serving on port ${port}`);
+    
+    // Start PM scheduler after server is running
+    pmScheduler.start();
   });
 })();

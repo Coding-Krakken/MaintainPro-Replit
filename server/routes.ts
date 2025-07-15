@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
+import { pmEngine } from "./services/pm-engine";
 import { 
   insertWorkOrderSchema, 
   insertEquipmentSchema, 
@@ -392,6 +393,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(stats);
     } catch (error) {
       res.status(500).json({ message: "Failed to get dashboard stats" });
+    }
+  });
+
+  // PM Engine endpoints
+  app.post("/api/pm-engine/generate", async (req, res) => {
+    try {
+      const warehouseId = getCurrentWarehouse(req);
+      const result = await pmEngine.generatePMWorkOrders(warehouseId);
+      res.json({ 
+        success: true, 
+        generated: result.length, 
+        workOrders: result 
+      });
+    } catch (error) {
+      console.error('PM generation error:', error);
+      res.status(500).json({ message: "Failed to generate PM work orders" });
+    }
+  });
+
+  app.get("/api/pm-engine/schedule/:equipmentId", async (req, res) => {
+    try {
+      const warehouseId = getCurrentWarehouse(req);
+      const equipmentId = req.params.equipmentId;
+      const templates = await storage.getPmTemplates(warehouseId);
+      
+      const schedules = [];
+      for (const template of templates) {
+        try {
+          const schedule = await pmEngine.getPMSchedule(equipmentId, template.id);
+          schedules.push(schedule);
+        } catch (error) {
+          // Skip templates that don't apply to this equipment
+          continue;
+        }
+      }
+      
+      res.json(schedules);
+    } catch (error) {
+      console.error('PM schedule error:', error);
+      res.status(500).json({ message: "Failed to get PM schedule" });
+    }
+  });
+
+  app.get("/api/pm-engine/compliance/:equipmentId", async (req, res) => {
+    try {
+      const warehouseId = getCurrentWarehouse(req);
+      const equipmentId = req.params.equipmentId;
+      const compliance = await pmEngine.checkComplianceStatus(equipmentId, warehouseId);
+      res.json(compliance);
+    } catch (error) {
+      console.error('PM compliance error:', error);
+      res.status(500).json({ message: "Failed to get compliance status" });
+    }
+  });
+
+  app.post("/api/pm-engine/run-automation", async (req, res) => {
+    try {
+      const warehouseId = getCurrentWarehouse(req);
+      const result = await pmEngine.runPMAutomation(warehouseId);
+      res.json(result);
+    } catch (error) {
+      console.error('PM automation error:', error);
+      res.status(500).json({ message: "Failed to run PM automation" });
     }
   });
 

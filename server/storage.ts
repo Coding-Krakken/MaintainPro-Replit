@@ -37,6 +37,7 @@ import {
 export interface IStorage {
   // Profiles
   getProfile(id: string): Promise<Profile | undefined>;
+  getProfiles(): Promise<Profile[]>;
   getProfileByEmail(email: string): Promise<Profile | undefined>;
   createProfile(profile: InsertProfile): Promise<Profile>;
   updateProfile(id: string, profile: Partial<InsertProfile>): Promise<Profile>;
@@ -63,6 +64,7 @@ export interface IStorage {
   // Work Order Checklist Items
   getChecklistItems(workOrderId: string): Promise<WorkOrderChecklistItem[]>;
   createChecklistItem(item: Omit<WorkOrderChecklistItem, 'id' | 'createdAt'>): Promise<WorkOrderChecklistItem>;
+  createWorkOrderChecklistItem(item: Omit<WorkOrderChecklistItem, 'id' | 'createdAt'>): Promise<WorkOrderChecklistItem>;
   updateChecklistItem(id: string, item: Partial<WorkOrderChecklistItem>): Promise<WorkOrderChecklistItem>;
   
   // Parts
@@ -438,11 +440,59 @@ export class MemStorage implements IStorage {
     this.notifications.set(notificationId1, notification1);
     this.notifications.set(notificationId2, notification2);
     this.notifications.set(notificationId3, notification3);
+
+    // Create PM Templates
+    const pmTemplate1Id = this.generateId();
+    const pmTemplate1: PmTemplate = {
+      id: pmTemplate1Id,
+      model: "Pump Model A",
+      component: "Oil Filter",
+      action: "Replace oil filter and check for leaks",
+      frequency: "monthly",
+      customFields: { oilType: "10W-30", filterSize: "Standard" },
+      active: true,
+      warehouseId,
+      createdAt: new Date(),
+    };
+
+    const pmTemplate2Id = this.generateId();
+    const pmTemplate2: PmTemplate = {
+      id: pmTemplate2Id,
+      model: "Pump Model A",
+      component: "Belt",
+      action: "Inspect belt tension and alignment",
+      frequency: "weekly",
+      customFields: { beltType: "V-Belt", tension: "Medium" },
+      active: true,
+      warehouseId,
+      createdAt: new Date(),
+    };
+
+    const pmTemplate3Id = this.generateId();
+    const pmTemplate3: PmTemplate = {
+      id: pmTemplate3Id,
+      model: "Conveyor System",
+      component: "Bearings",
+      action: "Lubricate bearings and check for wear",
+      frequency: "monthly",
+      customFields: { lubricant: "Multi-purpose grease" },
+      active: true,
+      warehouseId,
+      createdAt: new Date(),
+    };
+
+    this.pmTemplates.set(pmTemplate1Id, pmTemplate1);
+    this.pmTemplates.set(pmTemplate2Id, pmTemplate2);
+    this.pmTemplates.set(pmTemplate3Id, pmTemplate3);
   }
 
   // Profile methods
   async getProfile(id: string): Promise<Profile | undefined> {
     return this.profiles.get(id);
+  }
+
+  async getProfiles(): Promise<Profile[]> {
+    return Array.from(this.profiles.values());
   }
 
   async getProfileByEmail(email: string): Promise<Profile | undefined> {
@@ -452,8 +502,9 @@ export class MemStorage implements IStorage {
   async createProfile(insertProfile: InsertProfile): Promise<Profile> {
     const id = this.generateId();
     const profile: Profile = {
-      ...insertProfile,
       id,
+      ...insertProfile,
+      active: insertProfile.active ?? true,
       createdAt: new Date(),
     };
     this.profiles.set(id, profile);
@@ -478,11 +529,12 @@ export class MemStorage implements IStorage {
     return this.warehouses.get(id);
   }
 
-  async createWarehouse(insertWarehouse: InsertWarehouse): Promise<Warehouse> {
+  async createWarehouse(insertWarehouse: any): Promise<Warehouse> {
     const id = this.generateId();
     const warehouse: Warehouse = {
-      ...insertWarehouse,
       id,
+      ...insertWarehouse,
+      active: insertWarehouse.active ?? true,
       createdAt: new Date(),
     };
     this.warehouses.set(id, warehouse);
@@ -502,11 +554,11 @@ export class MemStorage implements IStorage {
     return Array.from(this.equipment.values()).find(e => e.assetTag === assetTag);
   }
 
-  async createEquipment(insertEquipment: InsertEquipment): Promise<Equipment> {
+  async createEquipment(insertEquipment: any): Promise<Equipment> {
     const id = this.generateId();
     const equipment: Equipment = {
-      ...insertEquipment,
       id,
+      ...insertEquipment,
       createdAt: new Date(),
     };
     this.equipment.set(id, equipment);
@@ -545,11 +597,11 @@ export class MemStorage implements IStorage {
 
   async createWorkOrder(insertWorkOrder: InsertWorkOrder): Promise<WorkOrder> {
     const id = this.generateId();
-    const foNumber = `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
+    const foNumber = insertWorkOrder.foNumber || `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
     const workOrder: WorkOrder = {
-      ...insertWorkOrder,
       id,
       foNumber,
+      ...insertWorkOrder,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -592,6 +644,10 @@ export class MemStorage implements IStorage {
     };
     this.checklistItems.set(id, checklistItem);
     return checklistItem;
+  }
+
+  async createWorkOrderChecklistItem(item: Omit<WorkOrderChecklistItem, 'id' | 'createdAt'>): Promise<WorkOrderChecklistItem> {
+    return this.createChecklistItem(item);
   }
 
   async updateChecklistItem(id: string, item: Partial<WorkOrderChecklistItem>): Promise<WorkOrderChecklistItem> {
