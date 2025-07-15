@@ -72,14 +72,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // In a real implementation, this would authenticate with Supabase
+      // Demo credentials validation
+      const validCredentials = [
+        { email: 'supervisor@maintainpro.com', password: 'demo123', role: 'supervisor' },
+        { email: 'technician@maintainpro.com', password: 'demo123', role: 'technician' },
+        { email: 'manager@maintainpro.com', password: 'demo123', role: 'manager' },
+      ];
+      
+      const validUser = validCredentials.find(cred => cred.email === email && cred.password === password);
+      
+      if (!validUser) {
+        throw new Error('Invalid credentials');
+      }
+      
       // For demo purposes, we'll simulate login
       const mockUser: AuthUser = {
-        id: 'supervisor-id',
+        id: `${validUser.role}-id`,
         email,
         firstName: 'John',
         lastName: 'Smith',
-        role: 'supervisor',
+        role: validUser.role as any,
         warehouseId: 'warehouse-1',
         active: true,
       };

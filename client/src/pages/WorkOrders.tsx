@@ -50,7 +50,11 @@ export default function WorkOrders() {
               Manage and track all maintenance work orders
             </p>
           </div>
-          <Button onClick={() => setShowCreateModal(true)} className="mt-4 sm:mt-0">
+          <Button 
+            onClick={() => setShowCreateModal(true)} 
+            className="mt-4 sm:mt-0"
+            data-testid="create-work-order-button"
+          >
             <Plus className="w-4 h-4 mr-2" />
             New Work Order
           </Button>

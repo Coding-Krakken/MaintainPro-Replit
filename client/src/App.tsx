@@ -39,6 +39,7 @@ function AppRoutes() {
   return (
     <Switch>
       <Route path="/auth" component={Auth} />
+      <Route path="/login" component={Auth} />
       <Route path="/">
         <ProtectedRoute>
           <Dashboard />

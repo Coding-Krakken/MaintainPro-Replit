@@ -1,10 +1,18 @@
 import { useState } from 'react';
-import { Menu, Search, Bell, QrCode } from 'lucide-react';
+import { Menu, Search, Bell, QrCode, ChevronDown, LogOut } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Badge } from '../ui/badge';
 import { useAuth } from '../../hooks/useAuth';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'wouter';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu';
 
 interface HeaderProps {
   onMobileMenuToggle: () => void;
@@ -13,7 +21,8 @@ interface HeaderProps {
 
 export default function Header({ onMobileMenuToggle, showMobileMenuButton }: HeaderProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const [, setLocation] = useLocation();
 
   const { data: notifications } = useQuery({
     queryKey: ['/api/notifications'],
@@ -35,6 +44,11 @@ export default function Header({ onMobileMenuToggle, showMobileMenuButton }: Hea
     e.preventDefault();
     // Implement search functionality
     console.log('Search:', searchQuery);
+  };
+
+  const handleLogout = async () => {
+    await logout();
+    setLocation('/login');
   };
 
   return (
@@ -99,14 +113,38 @@ export default function Header({ onMobileMenuToggle, showMobileMenuButton }: Hea
           </div>
           
           {/* User Menu */}
-          <div className="hidden sm:block">
-            <Button variant="ghost" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
-                <span className="text-primary-700 font-semibold text-sm">
-                  {user?.firstName?.[0]}{user?.lastName?.[0]}
-                </span>
-              </div>
-            </Button>
+          <div>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="flex items-center space-x-2"
+                  data-testid="user-menu-button"
+                >
+                  <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                    <span className="text-primary-700 font-semibold text-sm">
+                      {user?.firstName?.[0]}{user?.lastName?.[0]}
+                    </span>
+                  </div>
+                  <span data-testid="user-name" className="hidden sm:inline">
+                    {user?.firstName} {user?.lastName}
+                  </span>
+                  <ChevronDown className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <span className="text-sm text-gray-700">
+                    {user?.email}
+                  </span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} data-testid="logout-button">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

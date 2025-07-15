@@ -136,7 +136,7 @@ export class MemStorage implements IStorage {
 
   private seedData() {
     // Create default warehouse
-    const warehouseId = this.generateId();
+    const warehouseId = 'default-warehouse-id'; // Use fixed ID for demo
     const warehouse: Warehouse = {
       id: warehouseId,
       name: "Main Warehouse",
@@ -151,9 +151,9 @@ export class MemStorage implements IStorage {
     this.warehouses.set(warehouseId, warehouse);
 
     // Create default users
-    const supervisorId = this.generateId();
-    const technicianId = this.generateId();
-    const managerId = this.generateId();
+    const supervisorId = 'supervisor-id'; // Use fixed ID for demo
+    const technicianId = 'technician-id'; // Use fixed ID for demo
+    const managerId = 'manager-id'; // Use fixed ID for demo
     
     const supervisor: Profile = {
       id: supervisorId,
@@ -412,6 +412,8 @@ export class MemStorage implements IStorage {
       message: "Work Order WO-001 has been assigned to you",
       read: false,
       workOrderId: workOrderId1,
+      equipmentId: equipmentId1,
+      partId: null,
       createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000), // 2 hours ago
     };
     
@@ -423,6 +425,8 @@ export class MemStorage implements IStorage {
       message: "Part HYT106.0432 is below reorder point",
       read: false,
       partId: partId1,
+      equipmentId: null,
+      workOrderId: null,
       createdAt: new Date(Date.now() - 4 * 60 * 60 * 1000), // 4 hours ago
     };
     
@@ -434,6 +438,8 @@ export class MemStorage implements IStorage {
       message: "Work Order WO-001 is past due date",
       read: true,
       workOrderId: workOrderId1,
+      equipmentId: equipmentId1,
+      partId: null,
       createdAt: new Date(Date.now() - 6 * 60 * 60 * 1000), // 6 hours ago
     };
 
@@ -503,8 +509,7 @@ export class MemStorage implements IStorage {
     const id = this.generateId();
     const profile: Profile = {
       id,
-      ...insertProfile,
-      active: insertProfile.active ?? true,
+      ...(insertProfile as any),
       createdAt: new Date(),
     };
     this.profiles.set(id, profile);
@@ -597,11 +602,11 @@ export class MemStorage implements IStorage {
 
   async createWorkOrder(insertWorkOrder: InsertWorkOrder): Promise<WorkOrder> {
     const id = this.generateId();
-    const foNumber = insertWorkOrder.foNumber || `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
+    const foNumber = `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
     const workOrder: WorkOrder = {
       id,
       foNumber,
-      ...insertWorkOrder,
+      ...(insertWorkOrder as any),
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -675,8 +680,8 @@ export class MemStorage implements IStorage {
   async createPart(insertPart: InsertPart): Promise<Part> {
     const id = this.generateId();
     const part: Part = {
-      ...insertPart,
       id,
+      ...(insertPart as any),
       createdAt: new Date(),
     };
     this.parts.set(id, part);
@@ -719,8 +724,8 @@ export class MemStorage implements IStorage {
   async createVendor(insertVendor: InsertVendor): Promise<Vendor> {
     const id = this.generateId();
     const vendor: Vendor = {
-      ...insertVendor,
       id,
+      ...(insertVendor as any),
       createdAt: new Date(),
     };
     this.vendors.set(id, vendor);
@@ -739,8 +744,8 @@ export class MemStorage implements IStorage {
   async createPmTemplate(insertTemplate: InsertPmTemplate): Promise<PmTemplate> {
     const id = this.generateId();
     const template: PmTemplate = {
-      ...insertTemplate,
       id,
+      ...(insertTemplate as any),
       createdAt: new Date(),
     };
     this.pmTemplates.set(id, template);
@@ -757,8 +762,8 @@ export class MemStorage implements IStorage {
   async createNotification(insertNotification: InsertNotification): Promise<Notification> {
     const id = this.generateId();
     const notification: Notification = {
-      ...insertNotification,
       id,
+      ...(insertNotification as any),
       createdAt: new Date(),
     };
     this.notifications.set(id, notification);
@@ -784,8 +789,8 @@ export class MemStorage implements IStorage {
   async createAttachment(insertAttachment: InsertAttachment): Promise<Attachment> {
     const id = this.generateId();
     const attachment: Attachment = {
-      ...insertAttachment,
       id,
+      ...(insertAttachment as any),
       createdAt: new Date(),
     };
     this.attachments.set(id, attachment);

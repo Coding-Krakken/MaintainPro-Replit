@@ -24,7 +24,7 @@ export default function Inventory() {
     return matchesSearch && matchesCategory;
   }) || [];
 
-  const categories = [...new Set(parts?.map(p => p.category).filter(Boolean))] || [];
+  const categories = Array.from(new Set(parts?.map(p => p.category).filter(Boolean))) || [];
 
   const getStockStatus = (part: Part) => {
     if (part.stockLevel <= 0) {

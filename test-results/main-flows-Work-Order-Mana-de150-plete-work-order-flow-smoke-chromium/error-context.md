@@ -1,0 +1,71 @@
+# Page snapshot
+
+```yaml
+- region "Notifications (F8)":
+  - list
+- img
+- heading "MaintAInPro" [level=1]
+- paragraph: Enterprise CMMS
+- text: JS
+- paragraph: John Smith
+- paragraph: supervisor
+- navigation:
+  - link "Dashboard":
+    - /url: /dashboard
+    - img
+    - text: Dashboard
+  - link "Work Orders":
+    - /url: /work-orders
+    - img
+    - text: Work Orders
+  - link "Equipment":
+    - /url: /equipment
+    - img
+    - text: Equipment
+  - link "Inventory":
+    - /url: /inventory
+    - img
+    - text: Inventory
+  - link "Preventive Maintenance":
+    - /url: /preventive
+    - img
+    - text: Preventive Maintenance
+  - link "Vendors":
+    - /url: /vendors
+    - img
+    - text: Vendors
+  - link "Reports":
+    - /url: /reports
+    - img
+    - text: Reports
+- link "Settings":
+  - /url: /settings
+  - img
+  - text: Settings
+- banner:
+  - textbox "Search work orders, equipment..."
+  - img
+  - button "1":
+    - img
+    - text: "1"
+  - button "JS John Smith":
+    - text: JS John Smith
+    - img
+- main:
+  - heading "Work Orders" [level=1]
+  - paragraph: Manage and track all maintenance work orders
+  - button "New Work Order":
+    - img
+    - text: New Work Order
+  - text: Filters
+  - img
+  - textbox "Search work orders..."
+  - combobox: All Status
+  - combobox: All Priority
+  - button "Clear":
+    - img
+    - text: Clear
+  - text: Work Orders (0)
+  - paragraph: No work orders found
+  - button "Create First Work Order"
+```

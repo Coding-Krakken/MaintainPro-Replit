@@ -12,6 +12,7 @@ export default function Auth() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
   const { login } = useAuth();
   const [, setLocation] = useLocation();
   const { toast } = useToast();
@@ -19,6 +20,7 @@ export default function Auth() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
     try {
       await login(email, password);
@@ -28,9 +30,11 @@ export default function Auth() {
       });
       setLocation('/dashboard');
     } catch (error) {
+      const errorMessage = 'Invalid credentials';
+      setError(errorMessage);
       toast({
         title: 'Error',
-        description: 'Invalid credentials',
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
@@ -61,6 +65,15 @@ export default function Auth() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div 
+                  className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded"
+                  data-testid="error-message"
+                >
+                  {error}
+                </div>
+              )}
+              
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email Address
@@ -73,6 +86,7 @@ export default function Auth() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   className="mt-1"
+                  data-testid="email-input"
                 />
               </div>
 
@@ -89,6 +103,7 @@ export default function Auth() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Enter your password"
                     className="pr-10"
+                    data-testid="password-input"
                   />
                   <button
                     type="button"
@@ -108,6 +123,7 @@ export default function Auth() {
                 type="submit"
                 disabled={isLoading}
                 className="w-full"
+                data-testid="login-button"
               >
                 {isLoading ? 'Signing in...' : 'Sign In'}
               </Button>

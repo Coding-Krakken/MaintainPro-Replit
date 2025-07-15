@@ -71,6 +71,14 @@ export function serveStatic(app: Express) {
   const distPath = path.resolve(import.meta.dirname, "public");
 
   if (!fs.existsSync(distPath)) {
+    // In test environment, just serve a simple response instead of throwing
+    if (process.env.NODE_ENV === 'test') {
+      app.get('*', (req, res) => {
+        res.status(200).send('Test mode - client build not required');
+      });
+      return;
+    }
+    
     throw new Error(
       `Could not find the build directory: ${distPath}, make sure to build the client first`,
     );

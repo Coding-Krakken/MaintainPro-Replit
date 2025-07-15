@@ -67,6 +67,7 @@ export default function WorkOrderCard({ workOrder, onClick }: WorkOrderCardProps
         isOverdue ? 'border-red-200 bg-red-50' : 'border-gray-200'
       }`}
       onClick={onClick}
+      data-testid="work-order-card"
     >
       <div className="flex items-center space-x-4 flex-1 min-w-0">
         <div className="w-10 h-10 bg-primary-50 rounded-lg flex items-center justify-center flex-shrink-0">

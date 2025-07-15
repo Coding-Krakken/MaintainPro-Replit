@@ -43,7 +43,7 @@ export default function UpcomingMaintenance() {
     return equipment?.find(e => e.id === equipmentId)?.assetTag || 'Unknown';
   };
 
-  const isOverdue = (dueDate: string) => {
+  const isOverdue = (dueDate: string | Date) => {
     return new Date(dueDate) < new Date();
   };
 

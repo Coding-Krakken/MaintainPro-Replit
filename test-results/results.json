@@ -1,0 +1,2822 @@
+{
+  "config": {
+    "configFile": "/workspaces/MaintainPro-Replit/playwright.config.ts",
+    "rootDir": "/workspaces/MaintainPro-Replit/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/workspaces/MaintainPro-Replit/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/workspaces/MaintainPro-Replit/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspaces/MaintainPro-Replit/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/workspaces/MaintainPro-Replit/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspaces/MaintainPro-Replit/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/workspaces/MaintainPro-Replit/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspaces/MaintainPro-Replit/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "/workspaces/MaintainPro-Replit/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/workspaces/MaintainPro-Replit/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "/workspaces/MaintainPro-Replit/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.54.1",
+    "workers": 1,
+    "webServer": {
+      "command": "npm run dev",
+      "port": 5000,
+      "reuseExistingServer": true
+    }
+  },
+  "suites": [
+    {
+      "title": "basic.e2e.test.ts",
+      "file": "basic.e2e.test.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Basic E2E Tests",
+          "file": "basic.e2e.test.ts",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should load the homepage",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspaces/MaintainPro-Replit/tests/e2e/basic.e2e.test.ts",
+                        "line": 4,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "skipped",
+                      "duration": 0,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:02.191Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-4b7943e89f3cfbadd5ca",
+              "file": "basic.e2e.test.ts",
+              "line": 4,
+              "column": 8
+            },
+            {
+              "title": "should verify test framework",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 250,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:02.853Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-ae3a766561ff74e1ad96",
+              "file": "basic.e2e.test.ts",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should load the homepage",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspaces/MaintainPro-Replit/tests/e2e/basic.e2e.test.ts",
+                        "line": 4,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-90ac914bc393a855e94f",
+              "file": "basic.e2e.test.ts",
+              "line": 4,
+              "column": 8
+            },
+            {
+              "title": "should verify test framework",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-ed388f0e77e4bc2b9a85",
+              "file": "basic.e2e.test.ts",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should load the homepage",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspaces/MaintainPro-Replit/tests/e2e/basic.e2e.test.ts",
+                        "line": 4,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-e698ac96c22b7b58acf5",
+              "file": "basic.e2e.test.ts",
+              "line": 4,
+              "column": 8
+            },
+            {
+              "title": "should verify test framework",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-d7dc506090089e9baf15",
+              "file": "basic.e2e.test.ts",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should load the homepage",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspaces/MaintainPro-Replit/tests/e2e/basic.e2e.test.ts",
+                        "line": 4,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-9683ca5c3e809b93c8ea",
+              "file": "basic.e2e.test.ts",
+              "line": 4,
+              "column": 8
+            },
+            {
+              "title": "should verify test framework",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-bb1c1f8225511d38ac5c",
+              "file": "basic.e2e.test.ts",
+              "line": 16,
+              "column": 3
+            },
+            {
+              "title": "should load the homepage",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "location": {
+                        "file": "/workspaces/MaintainPro-Replit/tests/e2e/basic.e2e.test.ts",
+                        "line": 4,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "expectedStatus": "skipped",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-549f94712183b9f4e296",
+              "file": "basic.e2e.test.ts",
+              "line": 4,
+              "column": 8
+            },
+            {
+              "title": "should verify test framework",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-cc199169d7fa1612689a",
+              "file": "basic.e2e.test.ts",
+              "line": 16,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Responsive Design Tests",
+          "file": "basic.e2e.test.ts",
+          "line": 23,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should work on mobile viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 147,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:03.246Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-db1ca3d45b76d089f1ae",
+              "file": "basic.e2e.test.ts",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should work on desktop viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 215,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:03.402Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-ed5ba6972dcb25be5d0a",
+              "file": "basic.e2e.test.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should work on mobile viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-8b5a8a6c0796d8459dd8",
+              "file": "basic.e2e.test.ts",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should work on desktop viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-000c60e1134f48e0e512",
+              "file": "basic.e2e.test.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should work on mobile viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-37d9f083751a4425d90f",
+              "file": "basic.e2e.test.ts",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should work on desktop viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-572b994fc4abea13eea2",
+              "file": "basic.e2e.test.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should work on mobile viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-3cda4ae21bafac1c01ab",
+              "file": "basic.e2e.test.ts",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should work on desktop viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-898360b128493603af91",
+              "file": "basic.e2e.test.ts",
+              "line": 33,
+              "column": 3
+            },
+            {
+              "title": "should work on mobile viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-f622f9c271e0dd09371a",
+              "file": "basic.e2e.test.ts",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should work on desktop viewport",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "5b9ef2734cb882eb5f5a-a1b3629fd54ad908e5e8",
+              "file": "basic.e2e.test.ts",
+              "line": 33,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "main-flows.spec.ts",
+      "file": "main-flows.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Authentication Flow",
+          "file": "main-flows.spec.ts",
+          "line": 18,
+          "column": 6,
+          "specs": [
+            {
+              "title": "user can login and logout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 4296,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:03.647Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-80cbd646976e1e87920a",
+              "file": "main-flows.spec.ts",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "shows error for invalid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 872,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:07.948Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-36813e0ed1eed3e79244",
+              "file": "main-flows.spec.ts",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "user can login and logout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-d5d77ddddc7855be5982",
+              "file": "main-flows.spec.ts",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "shows error for invalid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-57e05b03a310f350348e",
+              "file": "main-flows.spec.ts",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "user can login and logout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-79012a226afd2323cb6c",
+              "file": "main-flows.spec.ts",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "shows error for invalid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f7045cfd88105156a42c",
+              "file": "main-flows.spec.ts",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "user can login and logout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-7bc0b991a32542190a53",
+              "file": "main-flows.spec.ts",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "shows error for invalid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-52415df9b1b60011c5e2",
+              "file": "main-flows.spec.ts",
+              "line": 42,
+              "column": 3
+            },
+            {
+              "title": "user can login and logout",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-1642787a828a8da07729",
+              "file": "main-flows.spec.ts",
+              "line": 19,
+              "column": 3
+            },
+            {
+              "title": "shows error for invalid credentials",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f7f441f532a3c5755a2f",
+              "file": "main-flows.spec.ts",
+              "line": 42,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Work Order Management",
+          "file": "main-flows.spec.ts",
+          "line": 55,
+          "column": 6,
+          "specs": [
+            {
+              "title": "technician can complete work order flow @smoke",
+              "ok": false,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 31961,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts",
+                            "column": 16,
+                            "line": 71
+                          },
+                          "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"work-order-card\"]:first-child')\u001b[22m\n\n\n\u001b[0m \u001b[90m 69 |\u001b[39m     \n \u001b[90m 70 |\u001b[39m     \u001b[90m// Select first work order\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 71 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mclick(\u001b[32m'[data-testid=\"work-order-card\"]:first-child'\u001b[39m)\n \u001b[90m    |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 72 |\u001b[39m     \n \u001b[90m 73 |\u001b[39m     \u001b[90m// Update status to in progress\u001b[39m\n \u001b[90m 74 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mselectOption(\u001b[32m'[data-testid=\"status-select\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'in_progress'\u001b[39m)\u001b[0m\n\u001b[2m    at /workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts:71:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:08.831Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-d26fc709bebd890b3b22",
+              "file": "main-flows.spec.ts",
+              "line": 65,
+              "column": 3
+            },
+            {
+              "title": "can create new work order",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 0,
+                      "status": "timedOut",
+                      "duration": 32045,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "/workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts",
+                            "column": 16,
+                            "line": 107
+                          },
+                          "message": "Error: page.fill: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"fo-number-input\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 105 |\u001b[39m     \n \u001b[90m 106 |\u001b[39m     \u001b[90m// Fill in work order details\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 107 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'[data-testid=\"fo-number-input\"]'\u001b[39m\u001b[33m,\u001b[39m testWorkOrder\u001b[33m.\u001b[39mfoNumber)\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 108 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mfill(\u001b[32m'[data-testid=\"description-input\"]'\u001b[39m\u001b[33m,\u001b[39m testWorkOrder\u001b[33m.\u001b[39mdescription)\n \u001b[90m 109 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mselectOption(\u001b[32m'[data-testid=\"priority-select\"]'\u001b[39m\u001b[33m,\u001b[39m testWorkOrder\u001b[33m.\u001b[39mpriority)\n \u001b[90m 110 |\u001b[39m     \u001b[0m\n\u001b[2m    at /workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts:107:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:22:41.518Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Management-can-create-new-work-order-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Management-can-create-new-work-order-chromium/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Management-can-create-new-work-order-chromium/error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-fe2fadbbb89fa96fbd57",
+              "file": "main-flows.spec.ts",
+              "line": 100,
+              "column": 3
+            },
+            {
+              "title": "can filter work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 0,
+                      "status": "interrupted",
+                      "duration": 21626,
+                      "error": {
+                        "message": "Error: page.selectOption: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"status-filter\"]')\u001b[22m\n",
+                        "stack": "Error: page.selectOption: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"status-filter\"]')\u001b[22m\n\n    at /workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts:127:16",
+                        "location": {
+                          "file": "/workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts",
+                          "column": 16,
+                          "line": 127
+                        },
+                        "snippet": "\u001b[0m \u001b[90m 125 |\u001b[39m     \n \u001b[90m 126 |\u001b[39m     \u001b[90m// Filter by status\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 127 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mselectOption(\u001b[32m'[data-testid=\"status-filter\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'new'\u001b[39m)\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 128 |\u001b[39m     \n \u001b[90m 129 |\u001b[39m     \u001b[90m// Verify filtering\u001b[39m\n \u001b[90m 130 |\u001b[39m     \u001b[36mconst\u001b[39m workOrderCards \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"work-order-card\"]'\u001b[39m)\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts",
+                            "column": 16,
+                            "line": 127
+                          },
+                          "message": "Error: page.selectOption: Test ended.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"status-filter\"]')\u001b[22m\n\n\n\u001b[0m \u001b[90m 125 |\u001b[39m     \n \u001b[90m 126 |\u001b[39m     \u001b[90m// Filter by status\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 127 |\u001b[39m     \u001b[36mawait\u001b[39m page\u001b[33m.\u001b[39mselectOption(\u001b[32m'[data-testid=\"status-filter\"]'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'new'\u001b[39m)\n \u001b[90m     |\u001b[39m                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 128 |\u001b[39m     \n \u001b[90m 129 |\u001b[39m     \u001b[90m// Verify filtering\u001b[39m\n \u001b[90m 130 |\u001b[39m     \u001b[36mconst\u001b[39m workOrderCards \u001b[33m=\u001b[39m page\u001b[33m.\u001b[39mlocator(\u001b[32m'[data-testid=\"work-order-card\"]'\u001b[39m)\u001b[0m\n\u001b[2m    at /workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts:127:16\u001b[22m"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-07-15T19:23:14.496Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Management-can-filter-work-orders-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/workspaces/MaintainPro-Replit/test-results/main-flows-Work-Order-Management-can-filter-work-orders-chromium/video.webm"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts",
+                        "column": 16,
+                        "line": 127
+                      }
+                    }
+                  ],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-a9dc825e90e4ef95876f",
+              "file": "main-flows.spec.ts",
+              "line": 123,
+              "column": 3
+            },
+            {
+              "title": "can search work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-9bb00d2ee452d134b547",
+              "file": "main-flows.spec.ts",
+              "line": 141,
+              "column": 3
+            },
+            {
+              "title": "technician can complete work order flow @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-2e3b64020277bf9b1998",
+              "file": "main-flows.spec.ts",
+              "line": 65,
+              "column": 3
+            },
+            {
+              "title": "can create new work order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f2984d10012966cbac9c",
+              "file": "main-flows.spec.ts",
+              "line": 100,
+              "column": 3
+            },
+            {
+              "title": "can filter work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-eab04d236bd8414a8934",
+              "file": "main-flows.spec.ts",
+              "line": 123,
+              "column": 3
+            },
+            {
+              "title": "can search work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-91e3e736952240aade25",
+              "file": "main-flows.spec.ts",
+              "line": 141,
+              "column": 3
+            },
+            {
+              "title": "technician can complete work order flow @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-d181808cf029f781fe75",
+              "file": "main-flows.spec.ts",
+              "line": 65,
+              "column": 3
+            },
+            {
+              "title": "can create new work order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-09a383f609303c9e82a2",
+              "file": "main-flows.spec.ts",
+              "line": 100,
+              "column": 3
+            },
+            {
+              "title": "can filter work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-89ccd69cd737c9a2a575",
+              "file": "main-flows.spec.ts",
+              "line": 123,
+              "column": 3
+            },
+            {
+              "title": "can search work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-e3c23daac4e66cd74a5a",
+              "file": "main-flows.spec.ts",
+              "line": 141,
+              "column": 3
+            },
+            {
+              "title": "technician can complete work order flow @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-3ad56efe05b0ebdceba4",
+              "file": "main-flows.spec.ts",
+              "line": 65,
+              "column": 3
+            },
+            {
+              "title": "can create new work order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-743ae5f2b9240afaa551",
+              "file": "main-flows.spec.ts",
+              "line": 100,
+              "column": 3
+            },
+            {
+              "title": "can filter work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-321de2c5d3ac91dbbb45",
+              "file": "main-flows.spec.ts",
+              "line": 123,
+              "column": 3
+            },
+            {
+              "title": "can search work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-eef72d86197f572760e2",
+              "file": "main-flows.spec.ts",
+              "line": 141,
+              "column": 3
+            },
+            {
+              "title": "technician can complete work order flow @smoke",
+              "ok": true,
+              "tags": [
+                "smoke"
+              ],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-2373f0606369b9f31c13",
+              "file": "main-flows.spec.ts",
+              "line": 65,
+              "column": 3
+            },
+            {
+              "title": "can create new work order",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-7190de675010948d6b67",
+              "file": "main-flows.spec.ts",
+              "line": 100,
+              "column": 3
+            },
+            {
+              "title": "can filter work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-1f48f0c149f430b0fa8a",
+              "file": "main-flows.spec.ts",
+              "line": 123,
+              "column": 3
+            },
+            {
+              "title": "can search work orders",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f935b3c509617a261607",
+              "file": "main-flows.spec.ts",
+              "line": 141,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Equipment Management",
+          "file": "main-flows.spec.ts",
+          "line": 153,
+          "column": 6,
+          "specs": [
+            {
+              "title": "can view equipment list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f4c4e6cbac2da2f6d832",
+              "file": "main-flows.spec.ts",
+              "line": 163,
+              "column": 3
+            },
+            {
+              "title": "can create new equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-b816486afbf00d4740bd",
+              "file": "main-flows.spec.ts",
+              "line": 172,
+              "column": 3
+            },
+            {
+              "title": "can scan QR code for equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-04320d9080af5a45b108",
+              "file": "main-flows.spec.ts",
+              "line": 192,
+              "column": 3
+            },
+            {
+              "title": "can view equipment list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-08a09a88424196d984ec",
+              "file": "main-flows.spec.ts",
+              "line": 163,
+              "column": 3
+            },
+            {
+              "title": "can create new equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-c7973ea4328bc6265c5d",
+              "file": "main-flows.spec.ts",
+              "line": 172,
+              "column": 3
+            },
+            {
+              "title": "can scan QR code for equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-7862e158a99b4c70473c",
+              "file": "main-flows.spec.ts",
+              "line": 192,
+              "column": 3
+            },
+            {
+              "title": "can view equipment list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-679082eca0ac4efc416b",
+              "file": "main-flows.spec.ts",
+              "line": 163,
+              "column": 3
+            },
+            {
+              "title": "can create new equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-34fdb895088b8f916ee7",
+              "file": "main-flows.spec.ts",
+              "line": 172,
+              "column": 3
+            },
+            {
+              "title": "can scan QR code for equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-9f985e421b903ef8fcd2",
+              "file": "main-flows.spec.ts",
+              "line": 192,
+              "column": 3
+            },
+            {
+              "title": "can view equipment list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-49b381bdd23164af775f",
+              "file": "main-flows.spec.ts",
+              "line": 163,
+              "column": 3
+            },
+            {
+              "title": "can create new equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-dd506ae58a71483b372b",
+              "file": "main-flows.spec.ts",
+              "line": 172,
+              "column": 3
+            },
+            {
+              "title": "can scan QR code for equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-7d77a46c1dd42fe7f8bd",
+              "file": "main-flows.spec.ts",
+              "line": 192,
+              "column": 3
+            },
+            {
+              "title": "can view equipment list",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-ed5d0f93ea2c218a6e84",
+              "file": "main-flows.spec.ts",
+              "line": 163,
+              "column": 3
+            },
+            {
+              "title": "can create new equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-4a825f8bc231e42f498a",
+              "file": "main-flows.spec.ts",
+              "line": 172,
+              "column": 3
+            },
+            {
+              "title": "can scan QR code for equipment",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-a641635c9cb49c658eb2",
+              "file": "main-flows.spec.ts",
+              "line": 192,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Dashboard and Analytics",
+          "file": "main-flows.spec.ts",
+          "line": 209,
+          "column": 6,
+          "specs": [
+            {
+              "title": "displays dashboard metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-ac55a7ac53dcb8e0b538",
+              "file": "main-flows.spec.ts",
+              "line": 218,
+              "column": 3
+            },
+            {
+              "title": "can filter dashboard by date range",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-7167bbb6e593a5e7ee04",
+              "file": "main-flows.spec.ts",
+              "line": 230,
+              "column": 3
+            },
+            {
+              "title": "displays dashboard metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-3e96fcbbed3aeffd3994",
+              "file": "main-flows.spec.ts",
+              "line": 218,
+              "column": 3
+            },
+            {
+              "title": "can filter dashboard by date range",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-843804fd7ce2921257c7",
+              "file": "main-flows.spec.ts",
+              "line": 230,
+              "column": 3
+            },
+            {
+              "title": "displays dashboard metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-57646772e997e04707e0",
+              "file": "main-flows.spec.ts",
+              "line": 218,
+              "column": 3
+            },
+            {
+              "title": "can filter dashboard by date range",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-d0764697cbaad7984a85",
+              "file": "main-flows.spec.ts",
+              "line": 230,
+              "column": 3
+            },
+            {
+              "title": "displays dashboard metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-556bce608fbca2166d9b",
+              "file": "main-flows.spec.ts",
+              "line": 218,
+              "column": 3
+            },
+            {
+              "title": "can filter dashboard by date range",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-fc64e4e8ba6cf2a9c407",
+              "file": "main-flows.spec.ts",
+              "line": 230,
+              "column": 3
+            },
+            {
+              "title": "displays dashboard metrics",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-81e617451cd2f2956c3b",
+              "file": "main-flows.spec.ts",
+              "line": 218,
+              "column": 3
+            },
+            {
+              "title": "can filter dashboard by date range",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-59ede7a60cd5844bd84e",
+              "file": "main-flows.spec.ts",
+              "line": 230,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Mobile Responsiveness",
+          "file": "main-flows.spec.ts",
+          "line": 246,
+          "column": 6,
+          "specs": [
+            {
+              "title": "mobile navigation works correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-62b50f6824e7c80a5359",
+              "file": "main-flows.spec.ts",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "work order cards are touch-friendly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-4c7c2b43d932d1041fc8",
+              "file": "main-flows.spec.ts",
+              "line": 268,
+              "column": 3
+            },
+            {
+              "title": "mobile navigation works correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-bef995bdb4e541fdda7e",
+              "file": "main-flows.spec.ts",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "work order cards are touch-friendly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-478e1a7f06d0586cee3e",
+              "file": "main-flows.spec.ts",
+              "line": 268,
+              "column": 3
+            },
+            {
+              "title": "mobile navigation works correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-0260f78ca8e30586d5c7",
+              "file": "main-flows.spec.ts",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "work order cards are touch-friendly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-d24d77fa0b729def30cc",
+              "file": "main-flows.spec.ts",
+              "line": 268,
+              "column": 3
+            },
+            {
+              "title": "mobile navigation works correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-7468f9973f020115417f",
+              "file": "main-flows.spec.ts",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "work order cards are touch-friendly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-51fd88d48ab4e0d1126c",
+              "file": "main-flows.spec.ts",
+              "line": 268,
+              "column": 3
+            },
+            {
+              "title": "mobile navigation works correctly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-a88395bb972985acebbc",
+              "file": "main-flows.spec.ts",
+              "line": 249,
+              "column": 3
+            },
+            {
+              "title": "work order cards are touch-friendly",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-0dc41e82d2c514b1b07d",
+              "file": "main-flows.spec.ts",
+              "line": 268,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Offline Functionality",
+          "file": "main-flows.spec.ts",
+          "line": 285,
+          "column": 6,
+          "specs": [
+            {
+              "title": "shows offline indicator when network is unavailable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-5fea19c68dd8c53c03b5",
+              "file": "main-flows.spec.ts",
+              "line": 286,
+              "column": 3
+            },
+            {
+              "title": "can complete work orders offline",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-29d99e3608f9e8f03cd6",
+              "file": "main-flows.spec.ts",
+              "line": 300,
+              "column": 3
+            },
+            {
+              "title": "shows offline indicator when network is unavailable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-1eb28f73a2f12b1b6b0c",
+              "file": "main-flows.spec.ts",
+              "line": 286,
+              "column": 3
+            },
+            {
+              "title": "can complete work orders offline",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-6e79e3d602d35d4f01fe",
+              "file": "main-flows.spec.ts",
+              "line": 300,
+              "column": 3
+            },
+            {
+              "title": "shows offline indicator when network is unavailable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-c6d6a9eff2d63883a29d",
+              "file": "main-flows.spec.ts",
+              "line": 286,
+              "column": 3
+            },
+            {
+              "title": "can complete work orders offline",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-84cb5a32d9146cb32c99",
+              "file": "main-flows.spec.ts",
+              "line": 300,
+              "column": 3
+            },
+            {
+              "title": "shows offline indicator when network is unavailable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-14beebbca5423e6d87b8",
+              "file": "main-flows.spec.ts",
+              "line": 286,
+              "column": 3
+            },
+            {
+              "title": "can complete work orders offline",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f79f9a08e0a0a9597d2c",
+              "file": "main-flows.spec.ts",
+              "line": 300,
+              "column": 3
+            },
+            {
+              "title": "shows offline indicator when network is unavailable",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-9586fe27974e66624188",
+              "file": "main-flows.spec.ts",
+              "line": 286,
+              "column": 3
+            },
+            {
+              "title": "can complete work orders offline",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-269559e560fb80582d6f",
+              "file": "main-flows.spec.ts",
+              "line": 300,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Accessibility",
+          "file": "main-flows.spec.ts",
+          "line": 328,
+          "column": 6,
+          "specs": [
+            {
+              "title": "supports keyboard navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-27ba76ea6425e6bab8a3",
+              "file": "main-flows.spec.ts",
+              "line": 329,
+              "column": 3
+            },
+            {
+              "title": "has proper focus indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-18176d1898e37807b6e8",
+              "file": "main-flows.spec.ts",
+              "line": 343,
+              "column": 3
+            },
+            {
+              "title": "supports keyboard navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-1b27754baa9269b46ef0",
+              "file": "main-flows.spec.ts",
+              "line": 329,
+              "column": 3
+            },
+            {
+              "title": "has proper focus indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-52c1e0da78b688a87050",
+              "file": "main-flows.spec.ts",
+              "line": 343,
+              "column": 3
+            },
+            {
+              "title": "supports keyboard navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-8ecd616d7e08f93048ba",
+              "file": "main-flows.spec.ts",
+              "line": 329,
+              "column": 3
+            },
+            {
+              "title": "has proper focus indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-c7fa5655eb0b59b1f420",
+              "file": "main-flows.spec.ts",
+              "line": 343,
+              "column": 3
+            },
+            {
+              "title": "supports keyboard navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-656ae4368a6149bdc3b9",
+              "file": "main-flows.spec.ts",
+              "line": 329,
+              "column": 3
+            },
+            {
+              "title": "has proper focus indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-5eb58e37a5925bbb89ed",
+              "file": "main-flows.spec.ts",
+              "line": 343,
+              "column": 3
+            },
+            {
+              "title": "supports keyboard navigation",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f77787c3e80a495ebba3",
+              "file": "main-flows.spec.ts",
+              "line": 329,
+              "column": 3
+            },
+            {
+              "title": "has proper focus indicators",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-a1fd929a58092d9b4ed2",
+              "file": "main-flows.spec.ts",
+              "line": 343,
+              "column": 3
+            }
+          ]
+        },
+        {
+          "title": "Performance",
+          "file": "main-flows.spec.ts",
+          "line": 356,
+          "column": 6,
+          "specs": [
+            {
+              "title": "dashboard loads within acceptable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-8fe811ba33c5de45e697",
+              "file": "main-flows.spec.ts",
+              "line": 357,
+              "column": 3
+            },
+            {
+              "title": "work order list handles large datasets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-1a56076374babe4ab61d",
+              "file": "main-flows.spec.ts",
+              "line": 371,
+              "column": 3
+            },
+            {
+              "title": "dashboard loads within acceptable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-b8fe76ba55670c7707c3",
+              "file": "main-flows.spec.ts",
+              "line": 357,
+              "column": 3
+            },
+            {
+              "title": "work order list handles large datasets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-504fcfa29ab306f4b47d",
+              "file": "main-flows.spec.ts",
+              "line": 371,
+              "column": 3
+            },
+            {
+              "title": "dashboard loads within acceptable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-c79482a9b7d57a2e0936",
+              "file": "main-flows.spec.ts",
+              "line": 357,
+              "column": 3
+            },
+            {
+              "title": "work order list handles large datasets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-d1a53dba341b30caac95",
+              "file": "main-flows.spec.ts",
+              "line": 371,
+              "column": 3
+            },
+            {
+              "title": "dashboard loads within acceptable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-b9dc26e8a196928a4aef",
+              "file": "main-flows.spec.ts",
+              "line": 357,
+              "column": 3
+            },
+            {
+              "title": "work order list handles large datasets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-f8a8f96845eacfb7a27c",
+              "file": "main-flows.spec.ts",
+              "line": 371,
+              "column": 3
+            },
+            {
+              "title": "dashboard loads within acceptable time",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-267e16cf6b0c5ace2e47",
+              "file": "main-flows.spec.ts",
+              "line": 357,
+              "column": 3
+            },
+            {
+              "title": "work order list handles large datasets",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [],
+                  "status": "skipped"
+                }
+              ],
+              "id": "e8b4ce0637035c87d0a9-52fa6167ec9fd7b6a8d8",
+              "file": "main-flows.spec.ts",
+              "line": 371,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-07-15T19:21:59.253Z",
+    "duration": 97117.73700000001,
+    "expected": 5,
+    "skipped": 108,
+    "unexpected": 2,
+    "flaky": 0
+  }
+}

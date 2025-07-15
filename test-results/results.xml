@@ -1,0 +1,566 @@
+<testsuites id="" name="" tests="115" failures="2" skipped="108" errors="0" time="97.117737">
+<testsuite name="basic.e2e.test.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="chromium" tests="4" failures="0" skipped="1" time="0.612" errors="0">
+<testcase name="Basic E2E Tests › should load the homepage" classname="basic.e2e.test.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic E2E Tests › should verify test framework" classname="basic.e2e.test.ts" time="0.25">
+</testcase>
+<testcase name="Responsive Design Tests › should work on mobile viewport" classname="basic.e2e.test.ts" time="0.147">
+</testcase>
+<testcase name="Responsive Design Tests › should work on desktop viewport" classname="basic.e2e.test.ts" time="0.215">
+</testcase>
+</testsuite>
+<testsuite name="main-flows.spec.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="chromium" tests="19" failures="2" skipped="15" time="90.8" errors="0">
+<testcase name="Authentication Flow › user can login and logout" classname="main-flows.spec.ts" time="4.296">
+</testcase>
+<testcase name="Authentication Flow › shows error for invalid credentials" classname="main-flows.spec.ts" time="0.872">
+</testcase>
+<testcase name="Work Order Management › technician can complete work order flow @smoke" classname="main-flows.spec.ts" time="31.961">
+<failure message="main-flows.spec.ts:65:3 technician can complete work order flow @smoke" type="FAILURE">
+<![CDATA[  [chromium] › main-flows.spec.ts:65:3 › Work Order Management › technician can complete work order flow @smoke 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.click: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="work-order-card"]:first-child')
+
+
+      69 |     
+      70 |     // Select first work order
+    > 71 |     await page.click('[data-testid="work-order-card"]:first-child')
+         |                ^
+      72 |     
+      73 |     // Update status to in progress
+      74 |     await page.selectOption('[data-testid="status-select"]', 'in_progress')
+        at /workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts:71:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/video.webm]]
+
+[[ATTACHMENT|main-flows-Work-Order-Mana-de150-plete-work-order-flow-smoke-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Work Order Management › can create new work order" classname="main-flows.spec.ts" time="32.045">
+<failure message="main-flows.spec.ts:100:3 can create new work order" type="FAILURE">
+<![CDATA[  [chromium] › main-flows.spec.ts:100:3 › Work Order Management › can create new work order ────────
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.fill: Test timeout of 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-testid="fo-number-input"]')
+
+
+      105 |     
+      106 |     // Fill in work order details
+    > 107 |     await page.fill('[data-testid="fo-number-input"]', testWorkOrder.foNumber)
+          |                ^
+      108 |     await page.fill('[data-testid="description-input"]', testWorkOrder.description)
+      109 |     await page.selectOption('[data-testid="priority-select"]', testWorkOrder.priority)
+      110 |     
+        at /workspaces/MaintainPro-Replit/tests/e2e/main-flows.spec.ts:107:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../../test-results/main-flows-Work-Order-Management-can-create-new-work-order-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ../../test-results/main-flows-Work-Order-Management-can-create-new-work-order-chromium/video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../test-results/main-flows-Work-Order-Management-can-create-new-work-order-chromium/error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|main-flows-Work-Order-Management-can-create-new-work-order-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|main-flows-Work-Order-Management-can-create-new-work-order-chromium/video.webm]]
+
+[[ATTACHMENT|main-flows-Work-Order-Management-can-create-new-work-order-chromium/error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Work Order Management › can filter work orders" classname="main-flows.spec.ts" time="21.626">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can search work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can view equipment list" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can create new equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can scan QR code for equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › displays dashboard metrics" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › can filter dashboard by date range" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › mobile navigation works correctly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › work order cards are touch-friendly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › shows offline indicator when network is unavailable" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › can complete work orders offline" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › supports keyboard navigation" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › has proper focus indicators" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › dashboard loads within acceptable time" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › work order list handles large datasets" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="basic.e2e.test.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="firefox" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Basic E2E Tests › should load the homepage" classname="basic.e2e.test.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic E2E Tests › should verify test framework" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on mobile viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on desktop viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="main-flows.spec.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="firefox" tests="19" failures="0" skipped="19" time="0" errors="0">
+<testcase name="Authentication Flow › user can login and logout" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › shows error for invalid credentials" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › technician can complete work order flow @smoke" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can create new work order" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can filter work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can search work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can view equipment list" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can create new equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can scan QR code for equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › displays dashboard metrics" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › can filter dashboard by date range" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › mobile navigation works correctly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › work order cards are touch-friendly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › shows offline indicator when network is unavailable" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › can complete work orders offline" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › supports keyboard navigation" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › has proper focus indicators" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › dashboard loads within acceptable time" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › work order list handles large datasets" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="basic.e2e.test.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="webkit" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Basic E2E Tests › should load the homepage" classname="basic.e2e.test.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic E2E Tests › should verify test framework" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on mobile viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on desktop viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="main-flows.spec.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="webkit" tests="19" failures="0" skipped="19" time="0" errors="0">
+<testcase name="Authentication Flow › user can login and logout" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › shows error for invalid credentials" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › technician can complete work order flow @smoke" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can create new work order" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can filter work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can search work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can view equipment list" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can create new equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can scan QR code for equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › displays dashboard metrics" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › can filter dashboard by date range" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › mobile navigation works correctly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › work order cards are touch-friendly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › shows offline indicator when network is unavailable" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › can complete work orders offline" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › supports keyboard navigation" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › has proper focus indicators" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › dashboard loads within acceptable time" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › work order list handles large datasets" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="basic.e2e.test.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="Mobile Chrome" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Basic E2E Tests › should load the homepage" classname="basic.e2e.test.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic E2E Tests › should verify test framework" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on mobile viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on desktop viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="main-flows.spec.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="Mobile Chrome" tests="19" failures="0" skipped="19" time="0" errors="0">
+<testcase name="Authentication Flow › user can login and logout" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › shows error for invalid credentials" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › technician can complete work order flow @smoke" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can create new work order" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can filter work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can search work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can view equipment list" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can create new equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can scan QR code for equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › displays dashboard metrics" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › can filter dashboard by date range" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › mobile navigation works correctly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › work order cards are touch-friendly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › shows offline indicator when network is unavailable" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › can complete work orders offline" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › supports keyboard navigation" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › has proper focus indicators" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › dashboard loads within acceptable time" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › work order list handles large datasets" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="basic.e2e.test.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="Mobile Safari" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Basic E2E Tests › should load the homepage" classname="basic.e2e.test.ts" time="0">
+<properties>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Basic E2E Tests › should verify test framework" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on mobile viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Responsive Design Tests › should work on desktop viewport" classname="basic.e2e.test.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="main-flows.spec.ts" timestamp="2025-07-15T19:22:02.190Z" hostname="Mobile Safari" tests="19" failures="0" skipped="19" time="0" errors="0">
+<testcase name="Authentication Flow › user can login and logout" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Flow › shows error for invalid credentials" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › technician can complete work order flow @smoke" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can create new work order" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can filter work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Work Order Management › can search work orders" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can view equipment list" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can create new equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Equipment Management › can scan QR code for equipment" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › displays dashboard metrics" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Dashboard and Analytics › can filter dashboard by date range" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › mobile navigation works correctly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Mobile Responsiveness › work order cards are touch-friendly" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › shows offline indicator when network is unavailable" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Offline Functionality › can complete work orders offline" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › supports keyboard navigation" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Accessibility › has proper focus indicators" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › dashboard loads within acceptable time" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Performance › work order list handles large datasets" classname="main-flows.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

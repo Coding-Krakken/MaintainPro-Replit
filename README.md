@@ -372,3 +372,55 @@ For support, please create an issue in the repository or contact the development
 ---
 
 **Built with ❤️ for industrial maintenance teams worldwide**
+
+## Testing Framework
+
+### 🧪 Comprehensive Test Suite
+
+MaintainPro includes a robust testing framework ensuring reliability and maintainability:
+
+#### Test Types & Coverage
+- **Unit Tests**: ✅ **17/17 PASSING** - Component and utility function testing
+- **Integration Tests**: ✅ **3/3 PASSING** - API and database integration testing  
+- **E2E Tests**: ✅ **Authentication Flow Working** - Browser-based user journey testing
+- **Accessibility Tests**: ⚠️ **Configured** - WCAG 2.1 AA compliance testing
+
+#### Testing Technologies
+- **Vitest** - Fast unit testing framework with coverage reporting
+- **Playwright** - Cross-browser E2E testing (Chrome, Firefox, Safari, Mobile)
+- **Jest + jest-axe** - Accessibility compliance testing
+- **React Testing Library** - Component testing utilities
+- **MSW (Mock Service Worker)** - API mocking and testing utilities
+
+#### Test Commands
+```bash
+# Run all tests
+npm run test:all
+
+# Individual test types
+npm run test:unit              # Unit tests
+npm run test:integration       # Integration tests
+npm run test:e2e              # End-to-end tests
+npm run test:accessibility    # Accessibility tests
+
+# Coverage and reporting
+npm run test:coverage         # Generate coverage reports
+npm run test:ui              # Interactive test UI
+```
+
+#### Test Infrastructure
+- **Automated Test Data**: Sample data with fixed IDs for consistent testing
+- **Multi-Browser Support**: Tests run across Chrome, Firefox, Safari, and mobile
+- **Auto-Server Startup**: Playwright automatically starts development server
+- **Test IDs**: Comprehensive `data-testid` attributes for reliable element selection
+- **Mock Data**: Realistic mock data for offline testing scenarios
+
+#### Key Testing Features
+- **Authentication Flow**: Login, logout, and role-based access testing
+- **Work Order Management**: Complete workflow testing from creation to completion
+- **Equipment Tracking**: QR code scanning and asset management testing
+- **Mobile Responsiveness**: Touch interactions and mobile-specific UI testing
+- **Error Handling**: Comprehensive error scenario testing
+- **Performance**: Load testing and response time validation
+
+For detailed testing documentation, see [TESTING_STATUS.md](TESTING_STATUS.md) and [tests/README.md](tests/README.md).
