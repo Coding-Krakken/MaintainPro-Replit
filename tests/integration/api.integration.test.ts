@@ -3,6 +3,7 @@ import request from 'supertest'
 import express, { type Express } from 'express'
 import { registerRoutes } from '../../server/routes'
 import { mockUser, mockWorkOrder } from '../utils/test-mocks'
+import { storage } from '../../server/storage'
 
 let app: Express
 
@@ -18,6 +19,38 @@ describe('Work Orders API Integration', () => {
     
     // Register routes
     await registerRoutes(app)
+    
+    // Add test data
+    try {
+      await storage.createWorkOrder({
+        id: '00000000-0000-0000-0000-000000000001',
+        foNumber: 'WO-TEST-001',
+        type: 'corrective',
+        description: 'Test work order',
+        status: 'new',
+        priority: 'medium',
+        requestedBy: '00000000-0000-0000-0000-000000000001',
+        warehouseId: '00000000-0000-0000-0000-000000000001',
+        equipmentId: '00000000-0000-0000-0000-000000000001',
+        area: 'Test Area',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      
+      await storage.createEquipment({
+        id: '00000000-0000-0000-0000-000000000001',
+        name: 'Test Equipment',
+        model: 'TEST-001',
+        serialNumber: 'SN123456',
+        location: 'Test Location',
+        status: 'active',
+        warehouseId: '00000000-0000-0000-0000-000000000001',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+    } catch (error) {
+      console.error('Error creating test data:', error);
+    }
   })
 
   afterAll(async () => {
@@ -63,7 +96,7 @@ describe('Work Orders API Integration', () => {
 
       expect(response.body).toBeInstanceOf(Array)
       response.body.forEach((workOrder: any) => {
-        expect(workOrder.warehouseId).toBe('1')
+        expect(workOrder.warehouseId).toBe('00000000-0000-0000-0000-000000000001')
       })
     })
   })
@@ -71,10 +104,10 @@ describe('Work Orders API Integration', () => {
   describe('POST /api/work-orders', () => {
     it('should create a new work order', async () => {
       const newWorkOrder = {
-        foNumber: 'WO-TEST-001',
+        foNumber: 'WO-TEST-NEW-001',
         description: 'Test work order creation',
         priority: 'medium',
-        equipmentId: '1',
+        equipmentId: '00000000-0000-0000-0000-000000000001',
       }
 
       const response = await request(app)
@@ -120,11 +153,11 @@ describe('Work Orders API Integration', () => {
   describe('GET /api/work-orders/:id', () => {
     it('should return specific work order', async () => {
       const response = await request(app)
-        .get('/api/work-orders/1')
+        .get('/api/work-orders/00000000-0000-0000-0000-000000000001')
         .set('Authorization', 'Bearer mock-token')
         .expect(200)
 
-      expect(response.body.id).toBe('1')
+      expect(response.body.id).toBe('00000000-0000-0000-0000-000000000001')
       expect(response.body.foNumber).toBeDefined()
       expect(response.body.description).toBeDefined()
     })
@@ -144,7 +177,7 @@ describe('Work Orders API Integration', () => {
       }
 
       const response = await request(app)
-        .patch('/api/work-orders/1')
+        .patch('/api/work-orders/00000000-0000-0000-0000-000000000001')
         .set('Authorization', 'Bearer mock-token')
         .send(updateData)
         .expect(200)
@@ -154,16 +187,16 @@ describe('Work Orders API Integration', () => {
 
     it('should update work order assignment', async () => {
       const updateData = {
-        assignedTo: '2',
+        assignedTo: '00000000-0000-0000-0000-000000000002',
       }
 
       const response = await request(app)
-        .patch('/api/work-orders/1')
+        .patch('/api/work-orders/00000000-0000-0000-0000-000000000001')
         .set('Authorization', 'Bearer mock-token')
         .send(updateData)
         .expect(200)
 
-      expect(response.body.assignedTo).toBe('2')
+      expect(response.body.assignedTo).toBe('00000000-0000-0000-0000-000000000002')
     })
 
     it('should validate status transitions', async () => {
@@ -173,7 +206,7 @@ describe('Work Orders API Integration', () => {
       }
 
       await request(app)
-        .patch('/api/work-orders/1')
+        .patch('/api/work-orders/00000000-0000-0000-0000-000000000001')
         .set('Authorization', 'Bearer mock-token')
         .send(invalidUpdate)
         .expect(400)
@@ -183,7 +216,7 @@ describe('Work Orders API Integration', () => {
   describe('DELETE /api/work-orders/:id', () => {
     it('should delete work order', async () => {
       await request(app)
-        .delete('/api/work-orders/1')
+        .delete('/api/work-orders/00000000-0000-0000-0000-000000000001')
         .set('Authorization', 'Bearer mock-token')
         .expect(204)
 
@@ -275,7 +308,7 @@ describe('Equipment API Integration', () => {
 
       expect(response.body).toBeInstanceOf(Array)
       response.body.forEach((equipment: any) => {
-        expect(equipment.warehouseId).toBe('1')
+        expect(equipment.warehouseId).toBe('00000000-0000-0000-0000-000000000001')
       })
     })
   })
@@ -283,10 +316,13 @@ describe('Equipment API Integration', () => {
   describe('POST /api/equipment', () => {
     it('should create new equipment', async () => {
       const newEquipment = {
-        name: 'Test Equipment',
-        model: 'TEST-001',
-        serialNumber: 'SN123456',
-        location: 'Plant 1',
+        assetTag: 'TEST-ASSET-001',
+        model: 'TEST-NEW-001',
+        serialNumber: 'SN-NEW-123456',
+        description: 'New Test Equipment',
+        area: 'Plant 1',
+        status: 'active',
+        criticality: 'medium',
       }
 
       const response = await request(app)
@@ -296,7 +332,7 @@ describe('Equipment API Integration', () => {
         .expect(201)
 
       expect(response.body.id).toBeDefined()
-      expect(response.body.name).toBe(newEquipment.name)
+      expect(response.body.assetTag).toBe(newEquipment.assetTag)
       expect(response.body.model).toBe(newEquipment.model)
     })
   })

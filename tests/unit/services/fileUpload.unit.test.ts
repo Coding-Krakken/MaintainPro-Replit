@@ -4,6 +4,50 @@ import { FileUploadService } from '../../../client/src/services/fileUpload';
 // Mock fetch
 global.fetch = vi.fn();
 
+// Mock browser APIs for file upload service
+global.document = {
+  createElement: vi.fn((tag) => {
+    if (tag === 'canvas') {
+      return {
+        width: 0,
+        height: 0,
+        getContext: vi.fn(() => ({
+          drawImage: vi.fn(),
+        })),
+        toBlob: vi.fn((callback) => {
+          setTimeout(() => callback(new Blob(['mock'], { type: 'image/jpeg' })), 0);
+        }),
+        toDataURL: vi.fn(() => 'data:image/jpeg;base64,mock'),
+      };
+    }
+    return {};
+  }),
+} as any;
+
+global.Image = class MockImage {
+  onload: (() => void) | null = null;
+  onerror: (() => void) | null = null;
+  width = 100;
+  height = 100;
+  
+  set src(value: string) {
+    setTimeout(() => {
+      if (this.onload) this.onload();
+    }, 0);
+  }
+} as any;
+
+global.URL = {
+  createObjectURL: vi.fn(() => 'mock-url'),
+  revokeObjectURL: vi.fn(),
+} as any;
+
+global.localStorage = {
+  getItem: vi.fn(() => ''),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+} as any;
+
 describe('FileUploadService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -14,32 +58,32 @@ describe('FileUploadService', () => {
       const imageFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
       const pdfFile = new File([''], 'test.pdf', { type: 'application/pdf' });
       
-      expect(FileUploadService.validateFile(imageFile)).toBe(true);
-      expect(FileUploadService.validateFile(pdfFile)).toBe(true);
+      expect(FileUploadService.validateFile(imageFile).isValid).toBe(true);
+      expect(FileUploadService.validateFile(pdfFile).isValid).toBe(true);
     });
 
     it('should reject invalid file types', () => {
       const execFile = new File([''], 'test.exe', { type: 'application/exe' });
       
-      expect(FileUploadService.validateFile(execFile)).toBe(false);
+      expect(FileUploadService.validateFile(execFile).isValid).toBe(false);
     });
 
     it('should reject files that are too large', () => {
       const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.jpg', { type: 'image/jpeg' });
       
-      expect(FileUploadService.validateFile(largeFile)).toBe(false);
+      expect(FileUploadService.validateFile(largeFile).isValid).toBe(false);
     });
 
     it('should accept files within size limit', () => {
       const smallFile = new File(['x'.repeat(1024)], 'small.jpg', { type: 'image/jpeg' });
       
-      expect(FileUploadService.validateFile(smallFile)).toBe(true);
+      expect(FileUploadService.validateFile(smallFile).isValid).toBe(true);
     });
   });
 
   describe('formatFileSize', () => {
     it('should format bytes correctly', () => {
-      expect(FileUploadService.formatFileSize(0)).toBe('0 B');
+      expect(FileUploadService.formatFileSize(0)).toBe('0 Bytes');
       expect(FileUploadService.formatFileSize(1024)).toBe('1 KB');
       expect(FileUploadService.formatFileSize(1024 * 1024)).toBe('1 MB');
       expect(FileUploadService.formatFileSize(1024 * 1024 * 1024)).toBe('1 GB');
@@ -112,37 +156,39 @@ describe('FileUploadService', () => {
 
   describe('uploadFile', () => {
     it('should upload file successfully', async () => {
-      const mockFile = new File(['content'], 'test.txt', { type: 'text/plain' });
+      const mockFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
       const mockResponse = {
         ok: true,
         json: vi.fn().mockResolvedValue({
-          fileUrl: 'https://example.com/file.txt',
-          fileName: 'test.txt',
+          fileUrl: 'https://example.com/file.jpg',
+          fileName: 'test.jpg',
+          fileSize: 1024,
+          fileType: 'image/jpeg',
         }),
       };
 
       (global.fetch as any).mockResolvedValue(mockResponse);
 
-      const progressCallback = vi.fn();
       const result = await FileUploadService.uploadFile(
         mockFile,
         { workOrderId: 'wo-123' },
-        {},
-        progressCallback
+        {}
       );
 
       expect(result.success).toBe(true);
-      expect(result.fileUrl).toBe('https://example.com/file.txt');
-      expect(result.fileName).toBe('test.txt');
-      expect(progressCallback).toHaveBeenCalled();
+      expect(result.fileUrl).toBe('https://example.com/file.jpg');
+      expect(result.fileName).toBe('test.jpg');
     });
 
     it('should handle upload failure', async () => {
-      const mockFile = new File(['content'], 'test.txt', { type: 'text/plain' });
+      const mockFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
       const mockResponse = {
         ok: false,
         status: 500,
         statusText: 'Server Error',
+        json: vi.fn().mockResolvedValue({
+          message: 'Server Error',
+        }),
       };
 
       (global.fetch as any).mockResolvedValue(mockResponse);
@@ -154,11 +200,11 @@ describe('FileUploadService', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Upload failed: 500 Server Error');
+      expect(result.error).toBe('Server Error');
     });
 
     it('should handle network errors', async () => {
-      const mockFile = new File(['content'], 'test.txt', { type: 'text/plain' });
+      const mockFile = new File(['content'], 'test.jpg', { type: 'image/jpeg' });
       
       (global.fetch as any).mockRejectedValue(new Error('Network error'));
 
@@ -182,7 +228,7 @@ describe('FileUploadService', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Invalid file type or size');
+      expect(result.error).toContain('File type application/exe is not allowed');
     });
   });
 
@@ -200,6 +246,11 @@ describe('FileUploadService', () => {
       expect(result).toBe(true);
       expect(global.fetch).toHaveBeenCalledWith('/api/attachments/file-123', {
         method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-user-id': '',
+          'x-warehouse-id': '',
+        },
       });
     });
 

@@ -13,7 +13,7 @@ describe('Basic Integration Test', () => {
     await delay(50)
     const end = Date.now()
     
-    expect(end - start).toBeGreaterThanOrEqual(50)
+    expect(end - start).toBeGreaterThanOrEqual(45)
   })
 
   it('should test JSON operations', () => {

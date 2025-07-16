@@ -59,6 +59,7 @@ export interface IStorage {
   getWorkOrder(id: string): Promise<WorkOrder | undefined>;
   createWorkOrder(workOrder: InsertWorkOrder): Promise<WorkOrder>;
   updateWorkOrder(id: string, workOrder: Partial<InsertWorkOrder>): Promise<WorkOrder>;
+  deleteWorkOrder(id: string): Promise<void>;
   getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]>;
   
   // Work Order Checklist Items
@@ -562,7 +563,7 @@ export class MemStorage implements IStorage {
   }
 
   async createEquipment(insertEquipment: any): Promise<Equipment> {
-    const id = this.generateId();
+    const id = insertEquipment.id || this.generateId();
     const equipment: Equipment = {
       id,
       ...insertEquipment,
@@ -603,8 +604,8 @@ export class MemStorage implements IStorage {
   }
 
   async createWorkOrder(insertWorkOrder: InsertWorkOrder): Promise<WorkOrder> {
-    const id = this.generateId();
-    const foNumber = `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
+    const id = (insertWorkOrder as any).id || this.generateId();
+    const foNumber = (insertWorkOrder as any).foNumber || `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
     const workOrder: WorkOrder = {
       id,
       foNumber,
@@ -627,6 +628,13 @@ export class MemStorage implements IStorage {
     };
     this.workOrders.set(id, updated);
     return updated;
+  }
+
+  async deleteWorkOrder(id: string): Promise<void> {
+    const existing = this.workOrders.get(id);
+    if (!existing) throw new Error('Work order not found');
+    
+    this.workOrders.delete(id);
   }
 
   async getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]> {

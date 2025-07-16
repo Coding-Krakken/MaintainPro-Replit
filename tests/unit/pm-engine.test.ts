@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { PMEngine } from '../../server/services/pm-engine';
 import { storage } from '../../server/storage';
-import { PmTemplate, Equipment, WorkOrder } from '../../shared/schema';
+import type { PmTemplate, Equipment, WorkOrder } from '../../shared/schema';
 
 // Mock storage
 vi.mock('../../server/storage', () => ({
@@ -38,7 +38,8 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'monthly',
-        estimatedDuration: 60,
+        customFields: {},
+        active: true,
         createdAt: new Date(),
       };
 
@@ -64,7 +65,8 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'daily',
-        estimatedDuration: 60,
+        customFields: {},
+        active: true,
         createdAt: new Date(),
       };
 
@@ -82,14 +84,19 @@ describe('PMEngine', () => {
         status: 'completed',
         priority: 'medium',
         requestedBy: 'user-1',
-        assignedTo: ['user-2'],
+        assignedTo: 'user-2',
         equipmentId: mockEquipmentId,
         createdAt: pastDate,
         completedAt: pastDate,
         escalated: false,
         followUp: false,
         escalationLevel: 0,
-        lastUpdated: pastDate,
+        dueDate: pastDate,
+        verifiedBy: null,
+        estimatedHours: null,
+        actualHours: null,
+        notes: null,
+        updatedAt: pastDate,
       }];
 
       vi.mocked(storage.getPmTemplate).mockResolvedValue(mockTemplate);
@@ -106,7 +113,6 @@ describe('PMEngine', () => {
         id: mockEquipmentId,
         warehouseId: mockWarehouseId,
         assetTag: 'TEST-001',
-        foNumber: 'FO-001',
         model: 'Test Model',
         manufacturer: 'Test Manufacturer',
         serialNumber: 'SN-001',
@@ -114,7 +120,9 @@ describe('PMEngine', () => {
         area: 'Test Area',
         status: 'active',
         criticality: 'medium',
-        installationDate: new Date(),
+        installDate: new Date(),
+        warrantyExpiry: null,
+        specifications: {},
         createdAt: new Date(),
       };
 
@@ -125,7 +133,8 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'monthly',
-        estimatedDuration: 60,
+        customFields: {},
+        active: true,
         createdAt: new Date(),
       }];
 
@@ -147,7 +156,6 @@ describe('PMEngine', () => {
         id: mockEquipmentId,
         warehouseId: mockWarehouseId,
         assetTag: 'TEST-001',
-        foNumber: 'FO-001',
         model: 'Test Model',
         manufacturer: 'Test Manufacturer',
         serialNumber: 'SN-001',
@@ -155,7 +163,9 @@ describe('PMEngine', () => {
         area: 'Test Area',
         status: 'active',
         criticality: 'medium',
-        installationDate: new Date(),
+        installDate: new Date(),
+        warrantyExpiry: null,
+        specifications: {},
         createdAt: new Date(),
       };
 
@@ -166,7 +176,8 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'daily',
-        estimatedDuration: 60,
+        customFields: {},
+        active: true,
         createdAt: new Date(),
       };
 
@@ -181,13 +192,19 @@ describe('PMEngine', () => {
         status: 'new',
         priority: 'medium',
         requestedBy: 'system',
-        assignedTo: [],
+        assignedTo: null,
         equipmentId: mockEquipmentId,
-        createdAt: new Date(),
-        escalated: false,
+        dueDate: null,
+        completedAt: null,
+        verifiedBy: null,
+        estimatedHours: null,
+        actualHours: null,
+        notes: null,
         followUp: false,
+        escalated: false,
         escalationLevel: 0,
-        lastUpdated: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       vi.mocked(storage.getPmTemplates).mockResolvedValue([mockTemplate]);
@@ -221,7 +238,6 @@ describe('PMEngine', () => {
         id: mockEquipmentId,
         warehouseId: mockWarehouseId,
         assetTag: 'TEST-001',
-        foNumber: 'FO-001',
         model: 'Test Model',
         manufacturer: 'Test Manufacturer',
         serialNumber: 'SN-001',
@@ -229,7 +245,9 @@ describe('PMEngine', () => {
         area: 'Test Area',
         status: 'active',
         criticality: 'medium',
-        installationDate: new Date(),
+        installDate: new Date(),
+        warrantyExpiry: null,
+        specifications: {},
         createdAt: new Date(),
       };
 
@@ -240,7 +258,8 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'daily',
-        estimatedDuration: 60,
+        customFields: {},
+        active: true,
         createdAt: new Date(),
       };
 
@@ -255,13 +274,19 @@ describe('PMEngine', () => {
         status: 'new',
         priority: 'medium',
         requestedBy: 'system',
-        assignedTo: [],
+        assignedTo: null,
         equipmentId: mockEquipmentId,
-        createdAt: new Date(),
-        escalated: false,
+        dueDate: null,
+        completedAt: null,
+        verifiedBy: null,
+        estimatedHours: null,
+        actualHours: null,
+        notes: null,
         followUp: false,
+        escalated: false,
         escalationLevel: 0,
-        lastUpdated: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       vi.mocked(storage.getPmTemplates).mockResolvedValue([mockTemplate]);
@@ -323,13 +348,19 @@ describe('PMEngine', () => {
         status: 'new',
         priority: 'medium',
         requestedBy: 'system',
-        assignedTo: [],
+        assignedTo: null,
         equipmentId: mockEquipmentId,
-        createdAt: new Date(),
-        escalated: false,
+        dueDate: null,
+        completedAt: null,
+        verifiedBy: null,
+        estimatedHours: null,
+        actualHours: null,
+        notes: null,
         followUp: false,
+        escalated: false,
         escalationLevel: 0,
-        lastUpdated: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
 
       vi.mocked(storage.getProfiles).mockResolvedValue([mockSupervisor]);
@@ -354,7 +385,8 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'daily',
-        estimatedDuration: 60,
+        customFields: {},
+        active: true,
         createdAt: new Date(),
       };
 
@@ -362,7 +394,6 @@ describe('PMEngine', () => {
         id: mockEquipmentId,
         warehouseId: mockWarehouseId,
         assetTag: 'TEST-001',
-        foNumber: 'FO-001',
         model: 'Test Model',
         manufacturer: 'Test Manufacturer',
         serialNumber: 'SN-001',
@@ -370,7 +401,9 @@ describe('PMEngine', () => {
         area: 'Test Area',
         status: 'active',
         criticality: 'medium',
-        installationDate: new Date(),
+        installDate: new Date(),
+        warrantyExpiry: null,
+        specifications: {},
         createdAt: new Date(),
       };
 

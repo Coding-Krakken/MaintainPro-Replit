@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '../utils/test-utils'
+import React from 'react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import { mockUser, mockWorkOrder, mockUseAuth } from '../utils/test-mocks'
 
 // Mock the useAuth hook
@@ -14,13 +15,12 @@ vi.mock('@/hooks/useWorkOrders', () => ({
 }))
 
 // Mock the WorkOrderCard component for this test
-const MockWorkOrderCard = ({ workOrder }: { workOrder: any }) => (
-  <div data-testid="work-order-card">
-    <h3>{workOrder.foNumber}</h3>
-    <p>{workOrder.description}</p>
-    <span data-testid="status-badge">{workOrder.status}</span>
-  </div>
-)
+const MockWorkOrderCard = ({ workOrder }: { workOrder: any }) => 
+  React.createElement('div', { 'data-testid': 'work-order-card' }, 
+    React.createElement('h3', null, workOrder.foNumber),
+    React.createElement('p', null, workOrder.description),
+    React.createElement('span', { 'data-testid': 'status-badge' }, workOrder.status)
+  )
 
 describe('WorkOrderCard Component', () => {
   beforeEach(() => {

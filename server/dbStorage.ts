@@ -317,6 +317,10 @@ export class DatabaseStorage implements IStorage {
     return updated;
   }
 
+  async deleteWorkOrder(id: string): Promise<void> {
+    await db.delete(workOrders).where(eq(workOrders.id, id));
+  }
+
   async getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]> {
     return await db.select().from(workOrders).where(eq(workOrders.assignedTo, userId));
   }
