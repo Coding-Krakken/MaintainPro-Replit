@@ -1,6 +1,5 @@
 import { pmEngine } from './pm-engine';
 import { storage } from '../storage';
-import { notificationEngine } from './notification-engine';
 
 export interface PMSchedulingRule {
   id: string;
@@ -396,14 +395,16 @@ class PMSchedulerEnhanced {
         );
 
         for (const recipient of recipients) {
-          await notificationEngine.sendNotification({
+          // Create notification record (notification engine removed)
+          await storage.createNotification({
             userId: recipient.id,
             type: 'pm_escalation',
             title: `PM Escalation - Level ${level}`,
             message: `Equipment ${equipment?.assetTag} has ${complianceStatus.missedPMCount} missed PM(s). Compliance: ${complianceStatus.compliancePercentage}%`,
-            equipmentId,
+            relatedEntityId: equipmentId,
+            relatedEntityType: 'equipment',
             priority: 'high',
-            channels: ['email', 'sms'],
+            warehouseId: config.warehouseId,
           });
         }
       }
