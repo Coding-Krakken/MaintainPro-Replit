@@ -5,6 +5,27 @@ All notable changes to MaintainPro CMMS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2025-07-16
+
+### Fixed - Railway Deployment Issues
+- **Server Startup**: Fixed server startup logic to work properly in production environments
+- **Module Imports**: Resolved ES module import issues that caused runtime errors
+- **PM Services**: Made PM Engine and PM Scheduler services optional to prevent server crashes
+- **Error Handling**: Enhanced error handling throughout the application for better stability
+- **Health Check**: Improved health check endpoint with comprehensive diagnostic information
+- **Logging**: Added extensive logging for better deployment troubleshooting
+
+### Added - Deployment Improvements
+- **DEPLOYMENT_FIXES.md**: Comprehensive documentation of deployment fixes and troubleshooting
+- **Enhanced Health Check**: Added uptime, environment, and port information to health endpoint
+- **Service Guards**: Added availability checks for all PM-related API endpoints
+- **Graceful Degradation**: Application now works even when PM services are unavailable
+
+### Changed - Infrastructure
+- **Railway Configuration**: Updated health check timeout and improved deployment reliability
+- **Database Connection**: Added fallback to in-memory storage for better deployment flexibility
+- **Static File Serving**: Enhanced static file serving with better error handling and logging
+
 ## [1.2.0] - 2025-07-16
 
 ### Added - Preventive Maintenance System Enhancement

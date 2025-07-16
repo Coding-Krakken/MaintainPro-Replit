@@ -1,8 +1,6 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { pmEngine } from "./services/pm-engine";
-import { pmScheduler } from "./services/pm-scheduler";
 import { 
   insertWorkOrderSchema, 
   insertEquipmentSchema, 
@@ -12,15 +10,57 @@ import {
 } from "@shared/schema";
 import { z } from "zod";
 
+// Import PM services with error handling
+let pmEngine: any = null;
+let pmScheduler: any = null;
+
+// Initialize PM services asynchronously
+async function initializePMServices() {
+  try {
+    const pmEngineModule = await import("./services/pm-engine");
+    pmEngine = pmEngineModule.pmEngine;
+    console.log('PM Engine imported successfully');
+  } catch (error) {
+    console.error('Failed to import PM Engine:', error);
+  }
+
+  try {
+    const pmSchedulerModule = await import("./services/pm-scheduler");
+    pmScheduler = pmSchedulerModule.pmScheduler;
+    console.log('PM Scheduler imported successfully');
+  } catch (error) {
+    console.error('Failed to import PM Scheduler:', error);
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  console.log('Starting route registration...');
+  
+  // Initialize PM services
+  await initializePMServices();
+  
   // Health check endpoint for Railway
   app.get("/api/health", (req, res) => {
-    res.status(200).json({ 
-      status: "ok", 
-      timestamp: new Date().toISOString(),
-      env: process.env.NODE_ENV || "development"
-    });
+    try {
+      console.log('Health check endpoint called');
+      res.status(200).json({ 
+        status: "ok", 
+        timestamp: new Date().toISOString(),
+        env: process.env.NODE_ENV || "development",
+        port: process.env.PORT || 5000,
+        uptime: process.uptime()
+      });
+    } catch (error) {
+      console.error('Health check error:', error);
+      res.status(500).json({ 
+        status: "error", 
+        timestamp: new Date().toISOString(),
+        error: error.message
+      });
+    }
   });
+
+  console.log('Health check endpoint registered');
 
   // Authentication middleware (simplified)
   const getCurrentUser = (req: any) => {
@@ -432,6 +472,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: "Warehouse ID is required" });
       }
 
+      if (!pmEngine) {
+        return res.status(503).json({ error: "PM Engine service is not available" });
+      }
+
       const days = parseInt(req.query.days as string) || 30;
       const endDate = new Date();
       const startDate = new Date();
@@ -508,6 +552,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // PM Scheduler control
   app.post("/api/pm-scheduler/start", async (req, res) => {
     try {
+      if (!pmScheduler) {
+        return res.status(503).json({ error: "PM Scheduler service is not available" });
+      }
       pmScheduler.start();
       res.json({ message: "PM scheduler started", status: pmScheduler.getStatus() });
     } catch (error) {
@@ -518,6 +565,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/pm-scheduler/stop", async (req, res) => {
     try {
+      if (!pmScheduler) {
+        return res.status(503).json({ error: "PM Scheduler service is not available" });
+      }
       pmScheduler.stop();
       res.json({ message: "PM scheduler stopped", status: pmScheduler.getStatus() });
     } catch (error) {
@@ -528,6 +578,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/pm-scheduler/status", async (req, res) => {
     try {
+      if (!pmScheduler) {
+        return res.status(503).json({ error: "PM Scheduler service is not available" });
+      }
       const status = pmScheduler.getStatus();
       res.json(status);
     } catch (error) {
@@ -538,6 +591,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/pm-scheduler/run", async (req, res) => {
     try {
+      if (!pmScheduler) {
+        return res.status(503).json({ error: "PM Scheduler service is not available" });
+      }
       const warehouseId = req.header("x-warehouse-id");
       if (!warehouseId) {
         return res.status(400).json({ error: "Warehouse ID is required" });
@@ -598,6 +654,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // PM Engine endpoints
   app.post("/api/pm-engine/generate", async (req, res) => {
     try {
+      if (!pmEngine) {
+        return res.status(503).json({ error: "PM Engine service is not available" });
+      }
       const warehouseId = getCurrentWarehouse(req);
       const result = await pmEngine.generatePMWorkOrders(warehouseId);
       res.json({ 
@@ -613,6 +672,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/pm-engine/schedule/:equipmentId", async (req, res) => {
     try {
+      if (!pmEngine) {
+        return res.status(503).json({ error: "PM Engine service is not available" });
+      }
       const warehouseId = getCurrentWarehouse(req);
       const equipmentId = req.params.equipmentId;
       const templates = await storage.getPmTemplates(warehouseId);
@@ -637,6 +699,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/pm-engine/compliance/:equipmentId", async (req, res) => {
     try {
+      if (!pmEngine) {
+        return res.status(503).json({ error: "PM Engine service is not available" });
+      }
       const warehouseId = getCurrentWarehouse(req);
       const equipmentId = req.params.equipmentId;
       const compliance = await pmEngine.checkComplianceStatus(equipmentId, warehouseId);
@@ -649,6 +714,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/pm-engine/run-automation", async (req, res) => {
     try {
+      if (!pmEngine) {
+        return res.status(503).json({ error: "PM Engine service is not available" });
+      }
       const warehouseId = getCurrentWarehouse(req);
       const result = await pmEngine.runPMAutomation(warehouseId);
       res.json(result);
@@ -684,5 +752,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   const httpServer = createServer(app);
+  console.log('HTTP server created successfully');
+  console.log('Route registration completed');
   return httpServer;
 }

@@ -204,6 +204,59 @@ npm run build
 npm start
 ```
 
+## Deployment
+
+### Railway Deployment
+
+The application is configured for easy deployment on Railway with the following files:
+
+- `railway.json`: Railway-specific configuration
+- `nixpacks.toml`: Build and runtime configuration
+- Health check endpoint: `/api/health`
+
+#### Environment Variables
+
+Set these environment variables in Railway:
+
+- `NODE_ENV`: Set to "production"
+- `PORT`: Port number (Railway sets this automatically)
+- `DATABASE_URL`: PostgreSQL connection string (optional - uses in-memory storage as fallback)
+
+#### Deployment Steps
+
+1. Connect your repository to Railway
+2. Set the required environment variables
+3. Deploy - Railway will automatically:
+   - Install dependencies
+   - Build the client application
+   - Start the server
+   - Monitor health checks
+
+For detailed deployment troubleshooting, see [DEPLOYMENT_FIXES.md](./DEPLOYMENT_FIXES.md).
+
+### Manual Deployment
+
+For manual deployment on other platforms:
+
+1. **Build the application**:
+   ```bash
+   npm run build
+   ```
+
+2. **Set environment variables**:
+   ```bash
+   export NODE_ENV=production
+   export PORT=5000
+   export DATABASE_URL=your_postgresql_connection_string
+   ```
+
+3. **Start the server**:
+   ```bash
+   npm start
+   ```
+
+The application will be available at `http://localhost:5000` with the health check at `/api/health`.
+
 ## Current Implementation Status
 
 ### ✅ Completed Features
