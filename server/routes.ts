@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { pmEngine } from "./services/pm-engine";
 import { pmScheduler } from "./services/pm-scheduler";
+import { pmSchedulerEnhanced } from './services/pm-scheduler-enhanced';
 import { 
   insertWorkOrderSchema, 
   insertEquipmentSchema, 
@@ -11,6 +12,8 @@ import {
   insertAttachmentSchema
 } from "@shared/schema";
 import { z } from "zod";
+import { advancedReportingService } from './services/advanced-reporting';
+import { securityService } from './services/security-service';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Health check endpoint for Railway
@@ -22,7 +25,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // Authentication middleware (simplified for demo)
+  // Authentication middleware (simplified)
   const getCurrentUser = (req: any) => {
     // In real implementation, this would verify JWT token
     return req.headers['x-user-id'] || 'default-user-id';
@@ -31,6 +34,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   const getCurrentWarehouse = (req: any) => {
     return req.headers['x-warehouse-id'] || 'default-warehouse-id';
   };
+
+  // Initialize security service
+  securityService.initialize();
+
+  // Apply rate limiting to all routes
+  app.use(securityService.createRateLimiter());
 
   // Profiles
   app.get("/api/profiles/me", async (req, res) => {
@@ -551,6 +560,92 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Enhanced PM Scheduling API endpoints
+  app.get('/api/pm-scheduling/rules/:warehouseId', async (req, res) => {
+    try {
+      const { warehouseId } = req.params;
+      const rules = await pmSchedulerEnhanced.loadSchedulingRules(warehouseId);
+      res.json(rules);
+    } catch (error) {
+      console.error('Error fetching PM scheduling rules:', error);
+      res.status(500).json({ error: 'Failed to fetch PM scheduling rules' });
+    }
+  });
+
+  app.get('/api/pm-scheduling/config/:warehouseId', async (req, res) => {
+    try {
+      const { warehouseId } = req.params;
+      const config = await pmSchedulerEnhanced.loadSchedulingConfig(warehouseId);
+      res.json(config);
+    } catch (error) {
+      console.error('Error fetching PM scheduling config:', error);
+      res.status(500).json({ error: 'Failed to fetch PM scheduling config' });
+    }
+  });
+
+  app.post('/api/pm-scheduling/generate-schedule', async (req, res) => {
+    try {
+      const { warehouseId, startDate, endDate } = req.body;
+      
+      if (!warehouseId || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+      }
+      
+      const schedule = await pmSchedulerEnhanced.generateOptimizedSchedule(
+        warehouseId,
+        new Date(startDate),
+        new Date(endDate)
+      );
+      
+      res.json(schedule);
+    } catch (error) {
+      console.error('Error generating PM schedule:', error);
+      res.status(500).json({ error: 'Failed to generate PM schedule' });
+    }
+  });
+
+  app.post('/api/pm-scheduling/start-automation', async (req, res) => {
+    try {
+      const { intervalMinutes } = req.body;
+      await pmSchedulerEnhanced.startAutomatedScheduling(intervalMinutes);
+      res.json({ message: 'PM scheduling automation started successfully' });
+    } catch (error) {
+      console.error('Error starting PM scheduling automation:', error);
+      res.status(500).json({ error: 'Failed to start PM scheduling automation' });
+    }
+  });
+
+  app.post('/api/pm-scheduling/stop-automation', async (req, res) => {
+    try {
+      pmSchedulerEnhanced.stopAutomatedScheduling();
+      res.json({ message: 'PM scheduling automation stopped successfully' });
+    } catch (error) {
+      console.error('Error stopping PM scheduling automation:', error);
+      res.status(500).json({ error: 'Failed to stop PM scheduling automation' });
+    }
+  });
+
+  app.get('/api/pm-scheduling/status', async (req, res) => {
+    try {
+      const status = pmSchedulerEnhanced.getSchedulingStatus();
+      res.json(status);
+    } catch (error) {
+      console.error('Error getting PM scheduling status:', error);
+      res.status(500).json({ error: 'Failed to get PM scheduling status' });
+    }
+  });
+
+  app.post('/api/pm-scheduling/process-escalations/:warehouseId', async (req, res) => {
+    try {
+      const { warehouseId } = req.params;
+      await pmSchedulerEnhanced.processMissedPMEscalations(warehouseId);
+      res.json({ message: 'PM escalations processed successfully' });
+    } catch (error) {
+      console.error('Error processing PM escalations:', error);
+      res.status(500).json({ error: 'Failed to process PM escalations' });
+    }
+  });
+
   // Notifications
   app.get("/api/notifications", async (req, res) => {
     try {
@@ -682,6 +777,317 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to create attachment" });
     }
   });
+
+  // Advanced Reporting API endpoints
+  app.post('/api/reports/kpi-metrics', async (req, res) => {
+    try {
+      const { warehouseId, startDate, endDate } = req.body;
+      
+      if (!warehouseId || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+      }
+      
+      const filter = {
+        warehouseId,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+      };
+      
+      const metrics = await advancedReportingService.generateKPIMetrics(filter);
+      res.json(metrics);
+    } catch (error) {
+      console.error('Error generating KPI metrics:', error);
+      res.status(500).json({ error: 'Failed to generate KPI metrics' });
+    }
+  });
+
+  app.post('/api/reports/trend-analysis', async (req, res) => {
+    try {
+      const { warehouseId, startDate, endDate } = req.body;
+      
+      if (!warehouseId || !startDate || !endDate) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+      }
+      
+      const filter = {
+        warehouseId,
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+      };
+      
+      const trends = await advancedReportingService.generateTrendAnalysis(filter);
+      res.json(trends);
+    } catch (error) {
+      console.error('Error generating trend analysis:', error);
+      res.status(500).json({ error: 'Failed to generate trend analysis' });
+    }
+  });
+
+  app.get('/api/reports/executive-dashboard/:warehouseId', async (req, res) => {
+    try {
+      const { warehouseId } = req.params;
+      const dashboard = await advancedReportingService.generateExecutiveDashboard(warehouseId);
+      res.json(dashboard);
+    } catch (error) {
+      console.error('Error generating executive dashboard:', error);
+      res.status(500).json({ error: 'Failed to generate executive dashboard' });
+    }
+  });
+
+  app.get('/api/reports/equipment-performance/:equipmentId', async (req, res) => {
+    try {
+      const { equipmentId } = req.params;
+      const { warehouseId } = req.query;
+      
+      if (!warehouseId) {
+        return res.status(400).json({ error: 'Missing warehouseId parameter' });
+      }
+      
+      const report = await advancedReportingService.generateEquipmentPerformanceReport(
+        equipmentId,
+        warehouseId as string
+      );
+      res.json(report);
+    } catch (error) {
+      console.error('Error generating equipment performance report:', error);
+      res.status(500).json({ error: 'Failed to generate equipment performance report' });
+    }
+  });
+
+  app.post('/api/reports/export', async (req, res) => {
+    try {
+      const { reportType, warehouseId, startDate, endDate, format } = req.body;
+      
+      if (!reportType || !warehouseId || !format) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+      }
+      
+      // For now, return a simple response - in production, this would generate actual files
+      const exportData = {
+        reportType,
+        warehouseId,
+        startDate,
+        endDate,
+        format,
+        downloadUrl: `/api/reports/download/${reportType}_${Date.now()}.${format}`,
+        generatedAt: new Date(),
+      };
+      
+      res.json(exportData);
+    } catch (error) {
+      console.error('Error exporting report:', error);
+      res.status(500).json({ error: 'Failed to export report' });
+    }
+  });
+
+  // Security API endpoints
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const ipAddress = req.ip || 'unknown';
+      
+      if (!email || !password) {
+        return res.status(400).json({ error: 'Email and password are required' });
+      }
+
+      // Check if IP is blocked due to too many failed attempts
+      const canAttempt = securityService.trackLoginAttempt(ipAddress, false);
+      if (!canAttempt) {
+        return res.status(429).json({ error: 'Too many failed login attempts. Please try again later.' });
+      }
+
+      // In a real implementation, this would validate against database
+      const user = { id: 'user123', email, role: 'technician', warehouseId: 'warehouse1' };
+      const isValidPassword = await securityService.verifyPassword(password, await securityService.hashPassword('password123'));
+      
+      if (!isValidPassword) {
+        securityService.trackLoginAttempt(ipAddress, false);
+        
+        securityService.logSecurityEvent({
+          userId: user.id,
+          userEmail: email,
+          action: 'failed_login',
+          ipAddress,
+          userAgent: req.headers['user-agent'] || 'unknown',
+          success: false,
+          riskLevel: 'medium',
+          details: { reason: 'invalid_password' },
+        });
+        
+        return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      securityService.trackLoginAttempt(ipAddress, true);
+      
+      // Create session
+      const sessionId = securityService.createSession(user.id);
+      
+      // Generate tokens
+      const { accessToken, refreshToken } = securityService.generateTokens({
+        userId: user.id,
+        email: user.email,
+        role: user.role,
+        warehouseId: user.warehouseId,
+        sessionId,
+        permissions: ['read', 'write', 'delete'],
+      });
+
+      securityService.logSecurityEvent({
+        userId: user.id,
+        userEmail: user.email,
+        action: 'login',
+        ipAddress,
+        userAgent: req.headers['user-agent'] || 'unknown',
+        success: true,
+        riskLevel: 'low',
+      });
+
+      res.json({
+        message: 'Login successful',
+        accessToken,
+        refreshToken,
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+          warehouseId: user.warehouseId,
+        },
+      });
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.post('/api/auth/logout', securityService.authenticateToken(), async (req, res) => {
+    try {
+      const user = (req as any).user;
+      
+      securityService.destroySession(user.sessionId);
+      
+      securityService.logSecurityEvent({
+        userId: user.userId,
+        userEmail: user.email,
+        action: 'logout',
+        ipAddress: req.ip || 'unknown',
+        userAgent: req.headers['user-agent'] || 'unknown',
+        success: true,
+        riskLevel: 'low',
+      });
+
+      res.json({ message: 'Logout successful' });
+    } catch (error) {
+      console.error('Logout error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.post('/api/auth/refresh', async (req, res) => {
+    try {
+      const { refreshToken } = req.body;
+      
+      if (!refreshToken) {
+        return res.status(400).json({ error: 'Refresh token is required' });
+      }
+
+      const payload = securityService.verifyToken(refreshToken);
+      if (!payload) {
+        return res.status(403).json({ error: 'Invalid refresh token' });
+      }
+
+      // Generate new tokens
+      const { accessToken, refreshToken: newRefreshToken } = securityService.generateTokens({
+        userId: payload.userId,
+        email: payload.email,
+        role: payload.role,
+        warehouseId: payload.warehouseId,
+        sessionId: payload.sessionId,
+        permissions: payload.permissions,
+      });
+
+      res.json({
+        accessToken,
+        refreshToken: newRefreshToken,
+      });
+    } catch (error) {
+      console.error('Token refresh error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.post('/api/auth/change-password', securityService.authenticateToken(), async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const { currentPassword, newPassword } = req.body;
+      
+      if (!currentPassword || !newPassword) {
+        return res.status(400).json({ error: 'Current password and new password are required' });
+      }
+
+      // Validate new password
+      const validation = securityService.validatePassword(newPassword);
+      if (!validation.isValid) {
+        return res.status(400).json({ error: 'Password validation failed', details: validation.errors });
+      }
+
+      // In a real implementation, this would verify against database
+      const isCurrentPasswordValid = await securityService.verifyPassword(currentPassword, await securityService.hashPassword('password123'));
+      if (!isCurrentPasswordValid) {
+        return res.status(401).json({ error: 'Current password is incorrect' });
+      }
+
+      // Hash new password
+      const hashedNewPassword = await securityService.hashPassword(newPassword);
+      
+      // In a real implementation, this would update the database
+      console.log('Password changed for user:', user.userId);
+
+      securityService.logSecurityEvent({
+        userId: user.userId,
+        userEmail: user.email,
+        action: 'password_change',
+        ipAddress: req.ip || 'unknown',
+        userAgent: req.headers['user-agent'] || 'unknown',
+        success: true,
+        riskLevel: 'low',
+      });
+
+      res.json({ message: 'Password changed successfully' });
+    } catch (error) {
+      console.error('Password change error:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  app.get('/api/security/alerts', securityService.authenticateToken(), securityService.requirePermission('admin'), async (req, res) => {
+    try {
+      const { limit } = req.query;
+      const alerts = securityService.getSecurityAlerts(limit ? parseInt(limit as string) : 50);
+      res.json(alerts);
+    } catch (error) {
+      console.error('Error fetching security alerts:', error);
+      res.status(500).json({ error: 'Failed to fetch security alerts' });
+    }
+  });
+
+  app.get('/api/security/audit-logs', securityService.authenticateToken(), securityService.requirePermission('admin'), async (req, res) => {
+    try {
+      const { userId, limit } = req.query;
+      const logs = securityService.getAuditLogs(userId as string, limit ? parseInt(limit as string) : 100);
+      res.json(logs);
+    } catch (error) {
+      console.error('Error fetching audit logs:', error);
+      res.status(500).json({ error: 'Failed to fetch audit logs' });
+    }
+  });
+
+  // Apply authentication to all protected routes
+  app.use('/api/work-orders', securityService.authenticateToken());
+  app.use('/api/equipment', securityService.authenticateToken());
+  app.use('/api/parts', securityService.authenticateToken());
+  app.use('/api/pm-templates', securityService.authenticateToken());
+  app.use('/api/pm-scheduling', securityService.authenticateToken());
+  app.use('/api/reports', securityService.authenticateToken());
 
   const httpServer = createServer(app);
   return httpServer;
