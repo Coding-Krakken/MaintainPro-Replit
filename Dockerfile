@@ -18,8 +18,8 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Expose port
-EXPOSE 5000
+# Railway will set the PORT environment variable dynamically
+# The application will bind to whatever port Railway specifies
 
 # Start the application
 CMD ["npm", "start"]
