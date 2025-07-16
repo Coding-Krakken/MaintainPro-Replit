@@ -13,6 +13,7 @@ import { useToast } from '../../hooks/use-toast';
 import { QrCode, Upload } from 'lucide-react';
 import { useState } from 'react';
 import QRScanner from '../qr/QRScanner';
+import FileUpload from '../FileUpload';
 
 const workOrderSchema = z.object({
   type: z.enum(['corrective', 'preventive', 'emergency']),
@@ -273,16 +274,25 @@ export default function WorkOrderForm({ onSuccess, onCancel, initialData }: Work
 
           {/* File Upload Section */}
           <div>
-            <FormLabel>Attach Photo</FormLabel>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mt-2">
-              <Upload className="mx-auto h-12 w-12 text-gray-400" />
-              <div className="mt-2">
-                <Button type="button" variant="ghost" className="text-primary-600">
-                  Take Photo
-                </Button>
-                <p className="text-gray-500 text-sm mt-1">or drag and drop a file</p>
-              </div>
-            </div>
+            <FormLabel>Attachments</FormLabel>
+            <FileUpload
+              workOrderId={initialData?.equipmentId} // Will be updated after work order creation
+              onUploadSuccess={(fileUrl, fileName) => {
+                toast({
+                  title: 'File Uploaded',
+                  description: `${fileName} uploaded successfully`,
+                });
+              }}
+              onUploadError={(error) => {
+                toast({
+                  title: 'Upload Failed',
+                  description: error,
+                  variant: 'destructive',
+                });
+              }}
+              maxFiles={5}
+              className="mt-2"
+            />
           </div>
 
           {/* Form Actions */}

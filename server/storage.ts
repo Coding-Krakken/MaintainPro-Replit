@@ -83,8 +83,10 @@ export interface IStorage {
   
   // PM Templates
   getPmTemplates(warehouseId: string): Promise<PmTemplate[]>;
-  getPmTemplate(id: string): Promise<PmTemplate | undefined>;
+  getPmTemplate(id: string): Promise<PmTemplate | null>;
   createPmTemplate(template: InsertPmTemplate): Promise<PmTemplate>;
+  updatePmTemplate(id: string, updates: Partial<InsertPmTemplate>): Promise<PmTemplate | null>;
+  deletePmTemplate(id: string): Promise<void>;
   
   // Notifications
   getNotifications(userId: string): Promise<Notification[]>;
@@ -737,8 +739,9 @@ export class MemStorage implements IStorage {
     return Array.from(this.pmTemplates.values()).filter(t => t.warehouseId === warehouseId && t.active);
   }
 
-  async getPmTemplate(id: string): Promise<PmTemplate | undefined> {
-    return this.pmTemplates.get(id);
+  async getPmTemplate(id: string): Promise<PmTemplate | null> {
+    const template = this.pmTemplates.get(id);
+    return template ? { ...template } : null;
   }
 
   async createPmTemplate(insertTemplate: InsertPmTemplate): Promise<PmTemplate> {
@@ -750,6 +753,19 @@ export class MemStorage implements IStorage {
     };
     this.pmTemplates.set(id, template);
     return template;
+  }
+
+  async updatePmTemplate(id: string, updates: Partial<InsertPmTemplate>): Promise<PmTemplate | null> {
+    const existing = this.pmTemplates.get(id);
+    if (!existing) return null;
+    
+    const updated: PmTemplate = { ...existing, ...updates };
+    this.pmTemplates.set(id, updated);
+    return updated;
+  }
+
+  async deletePmTemplate(id: string): Promise<void> {
+    this.pmTemplates.delete(id);
   }
 
   // Notification methods

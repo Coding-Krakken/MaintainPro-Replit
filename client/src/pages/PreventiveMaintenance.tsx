@@ -1,8 +1,8 @@
 import React from 'react';
-import PMDashboard from '@/components/pm/PMDashboard';
+import PMManagement from '@/components/pm/PMManagement';
 
 const PreventiveMaintenance: React.FC = () => {
-  return <PMDashboard />;
+  return <PMManagement />;
 };
 
 export default PreventiveMaintenance;

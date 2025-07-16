@@ -421,9 +421,9 @@ export class DatabaseStorage implements IStorage {
     return await db.select().from(pmTemplates).where(eq(pmTemplates.warehouseId, warehouseId));
   }
 
-  async getPmTemplate(id: string): Promise<PmTemplate | undefined> {
+  async getPmTemplate(id: string): Promise<PmTemplate | null> {
     const result = await db.select().from(pmTemplates).where(eq(pmTemplates.id, id)).limit(1);
-    return result[0];
+    return result[0] || null;
   }
 
   async createPmTemplate(template: InsertPmTemplate): Promise<PmTemplate> {
@@ -434,6 +434,19 @@ export class DatabaseStorage implements IStorage {
     };
     const [created] = await db.insert(pmTemplates).values(newTemplate).returning();
     return created;
+  }
+
+  async updatePmTemplate(id: string, updates: Partial<InsertPmTemplate>): Promise<PmTemplate | null> {
+    const [updated] = await db
+      .update(pmTemplates)
+      .set(updates)
+      .where(eq(pmTemplates.id, id))
+      .returning();
+    return updated || null;
+  }
+
+  async deletePmTemplate(id: string): Promise<void> {
+    await db.delete(pmTemplates).where(eq(pmTemplates.id, id));
   }
 
   // Notifications

@@ -1,4 +1,4 @@
-export * from '@shared/schema';
+export * from '../../../shared/schema';
 
 export interface DashboardStats {
   activeWorkOrders: number;
@@ -47,6 +47,39 @@ export interface AuthUser {
   active: boolean;
 }
 
+// File upload and attachment types
+export interface Attachment {
+  id: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: number;
+  fileType: string;
+  workOrderId?: string;
+  equipmentId?: string;
+  pmTemplateId?: string;
+  vendorId?: string;
+  uploadedBy: string;
+  createdAt: string;
+}
+
+export interface AttachmentUpload {
+  file: File;
+  progress: number;
+  url?: string;
+  error?: string;
+}
+
+export interface FileUploadOptions {
+  workOrderId?: string;
+  equipmentId?: string;
+  pmTemplateId?: string;
+  vendorId?: string;
+  maxSize?: number;
+  allowedTypes?: string[];
+  compress?: boolean;
+  quality?: number;
+}
+
 export interface NetworkStatus {
   isOnline: boolean;
   isSlowConnection: boolean;
@@ -74,18 +107,4 @@ export interface Alert {
   equipmentId?: string;
   workOrderId?: string;
   partId?: string;
-}
-
-export interface FileUploadOptions {
-  maxSize: number; // in bytes
-  allowedTypes: string[];
-  compress: boolean;
-  quality?: number; // for image compression
-}
-
-export interface AttachmentUpload {
-  file: File;
-  progress: number;
-  url?: string;
-  error?: string;
 }

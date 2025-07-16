@@ -15,12 +15,13 @@ MaintainPro is a production-ready, enterprise-grade Computerized Maintenance Man
 - **🔧 Work Order Management**: Complete maintenance workflow with mobile-first design
 - **📱 Equipment Tracking**: QR code-enabled asset management with real-time status updates
 - **📦 Inventory Management**: Smart parts tracking with automated reorder alerts
-- **⚡ Preventive Maintenance**: Template-based scheduling with compliance tracking
+- **⚡ Preventive Maintenance**: Advanced template-based scheduling with compliance tracking ✨ **NEW**
 - **🏢 Multi-Warehouse Support**: Enterprise-grade multi-location management
 - **📊 Real-time Analytics**: Live dashboards and comprehensive reporting
 - **🔒 Role-Based Access**: Secure multi-tenant architecture with granular permissions
 - **📱 Mobile Responsive**: Optimized for field technicians and mobile operations
 - **🔄 Offline Capability**: Robust offline functionality with automatic sync
+- **🎯 PM Automation**: Intelligent preventive maintenance scheduling ✨ **NEW**
 
 ## Architecture
 
@@ -97,6 +98,59 @@ npm run db:generate
 ### 4. Start Development Server
 
 ```bash
+# Start development server (frontend + backend)
+npm run dev
+
+# The application will be available at:
+# Frontend: http://localhost:3000
+# Backend API: http://localhost:5000
+```
+
+## 🎯 New in v1.2.0 - Enhanced Preventive Maintenance
+
+### Advanced PM Features
+
+**PM Dashboard**
+- Real-time compliance monitoring with live updates
+- Visual compliance rate indicators and trends
+- Equipment-specific maintenance tracking
+- Overdue alerts and priority management
+
+**Template Management**
+- Advanced search and filtering capabilities
+- Frequency-based template organization
+- Custom field support for specialized equipment
+- CRUD operations with form validation
+
+**Scheduling Engine**
+- Automated work order generation
+- Visual calendar interface for upcoming maintenance
+- Priority-based scheduling (High, Medium, Low)
+- Time range views (7, 14, 30 days)
+
+**Compliance Tracking**
+- CSV export for compliance reports
+- Monthly trend analysis
+- Equipment-specific compliance rates
+- Color-coded status indicators
+
+### PM API Endpoints
+
+```bash
+# Get all PM templates
+GET /api/pm-templates
+
+# Create new PM template
+POST /api/pm-templates
+
+# Get compliance data
+GET /api/pm-compliance?days=30
+
+# Manual scheduler run
+POST /api/pm-scheduler/run
+```
+
+For complete API documentation, see [Documentation/Edits/API_DOCUMENTATION.md](Documentation/Edits/API_DOCUMENTATION.md).
 npm run dev
 ```
 

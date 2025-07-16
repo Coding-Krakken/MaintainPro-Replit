@@ -5,7 +5,56 @@ All notable changes to MaintainPro CMMS will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.0] - 2025-07-16
+
+### Added - Preventive Maintenance System Enhancement
+- **PMManagement.tsx**: Enhanced main container with real-time dashboard
+  - Quick stats overview (compliance %, overdue PMs, completed PMs, active templates)
+  - Enhanced tab navigation with icons
+  - Real-time data updates from API endpoints
+- **PMComplianceDashboard.tsx**: Advanced compliance monitoring
+  - Real-time updates with 30-second refresh intervals
+  - Advanced filtering by compliance status (all, compliant, at-risk, overdue)
+  - CSV export functionality for compliance reports
+  - Visual indicators with color-coded compliance rates
+  - Monthly trends with historical compliance tracking
+- **PMTemplateManager.tsx**: Comprehensive template management
+  - Advanced search across model, component, and action fields
+  - Frequency-based filtering (daily, weekly, monthly, quarterly, annually)
+  - Enhanced template cards with custom fields display
+  - Full CRUD operations with proper validation
+  - Input validation with user-friendly error handling
+- **PMScheduler.tsx**: Visual scheduling interface
+  - Upcoming PMs view with visual calendar
+  - Status indicators (overdue, due, upcoming) with color coding
+  - Time range selection (7, 14, 30 days)
+  - Enhanced status display with metrics
+  - Smart date display ("Today", "Tomorrow", formatted dates)
+  - Priority levels (High, Medium, Low)
+
+### Enhanced - Technical Infrastructure
+- **API Integration**: TanStack Query for efficient data fetching
+- **Real-time Updates**: Configurable refresh intervals
+- **Error Handling**: User-friendly toast notifications
+- **UI/UX**: Consistent design system with Shadcn/ui components
+- **Performance**: Efficient filtering and search with useMemo
+- **TypeScript**: Enhanced type safety with proper interfaces
+- **File Upload**: Fixed FileUploadOptions interface with validation properties
+
+### Fixed
+- TypeScript compilation errors in file upload service
+- Import path issues with shared schema
+- Toast notification implementation using local useToast hook
+- PM template type definitions and validation
+
+### API Endpoints Tested
+- `GET /api/pm-templates` - Template retrieval
+- `POST /api/pm-templates` - Template creation
+- `GET /api/pm-compliance` - Compliance monitoring
+- `POST /api/pm-scheduler/run` - Manual scheduler execution
+- `GET /api/pm-scheduler/status` - Scheduler status
+
+## [1.1.0] - Previous Release
 
 ### Added
 - Comprehensive E2E testing framework with Playwright
