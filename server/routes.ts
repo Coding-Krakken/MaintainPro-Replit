@@ -12,6 +12,15 @@ import {
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Health check endpoint for Railway
+  app.get("/api/health", (req, res) => {
+    res.status(200).json({ 
+      status: "ok", 
+      timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV || "development"
+    });
+  });
+
   // Authentication middleware (simplified for demo)
   const getCurrentUser = (req: any) => {
     // In real implementation, this would verify JWT token

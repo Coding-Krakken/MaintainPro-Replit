@@ -61,7 +61,7 @@ async function initializeApp() {
   // importantly only setup vite in development and after
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
+  if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
@@ -79,13 +79,13 @@ if (process.env.NODE_ENV === 'test') {
 export { app };
 
 // Only run server if this file is being executed directly
-if (require.main === module || process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'test') {
   (async () => {
     const server = await initializeApp();
     
     // Serve the app on configured port (default 5000)
     const port = process.env.PORT || 5000;
-    server.listen({
+    const httpServer = server.listen({
       port: Number(port),
       host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
     }, () => {
@@ -93,6 +93,23 @@ if (require.main === module || process.env.NODE_ENV === 'development') {
       
       // Start PM scheduler after server is running
       pmScheduler.start();
+    });
+
+    // Graceful shutdown handling
+    process.on('SIGTERM', () => {
+      log('SIGTERM received, shutting down gracefully');
+      httpServer.close(() => {
+        log('HTTP server closed');
+        process.exit(0);
+      });
+    });
+
+    process.on('SIGINT', () => {
+      log('SIGINT received, shutting down gracefully');
+      httpServer.close(() => {
+        log('HTTP server closed');
+        process.exit(0);
+      });
     });
   })();
 }
