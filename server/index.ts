@@ -102,14 +102,23 @@ if (isMainModule && process.env.NODE_ENV !== 'test') {
       console.log('Starting server...');
       const server = await initializeApp();
       
-      // Serve the app on configured port (default 5000)
-      const port = process.env.PORT || 5000;
+      // Serve the app on configured port (Railway sets PORT=8080 by default)
+      const port = process.env.PORT || 8080;
+      
+      // Validate port configuration
+      if (!port || isNaN(Number(port))) {
+        throw new Error(`Invalid port configuration: ${port}`);
+      }
+      
+      console.log(`Configured port: ${port} (from ${process.env.PORT ? 'environment' : 'default'})`);
+      
       server.listen({
         port: Number(port),
         host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
       }, () => {
         log(`serving on port ${port}`);
         console.log(`Server is running on http://${process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"}:${port}`);
+        console.log(`Railway will proxy external traffic to this port`);
         
         // Start PM scheduler after server is running (optional)
         (async () => {

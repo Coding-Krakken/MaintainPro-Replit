@@ -1,4 +1,6 @@
 {
+  "name": "MaintainPro CMMS",
+  "description": "Enterprise CMMS application with automated port configuration",
   "build": {
     "builder": "DOCKERFILE"
   },
@@ -13,5 +15,9 @@
     "NODE_ENV": "production",
     "NPM_CONFIG_PRODUCTION": "false",
     "PORT": "8080"
+  },
+  "networking": {
+    "port": 8080,
+    "protocol": "http"
   }
 }
