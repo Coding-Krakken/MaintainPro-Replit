@@ -7,6 +7,7 @@ import { PmTemplate, Equipment, WorkOrder } from '../../shared/schema';
 vi.mock('../../server/storage', () => ({
   storage: {
     getPmTemplates: vi.fn(),
+    getPmTemplate: vi.fn(),
     getEquipment: vi.fn(),
     getWorkOrders: vi.fn(),
     createWorkOrder: vi.fn(),

@@ -1,8 +1,9 @@
 import { beforeEach, describe, it, expect, vi } from 'vitest';
 import { cleanup, render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'wouter';
 import React from 'react';
+import '@testing-library/jest-dom';
 
 // Test utilities
 export const createWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -18,7 +19,7 @@ export const createWrapper = ({ children }: { children: React.ReactNode }) => {
     QueryClientProvider,
     { client: queryClient },
     React.createElement(
-      BrowserRouter,
+      Router,
       null,
       children
     )
@@ -233,19 +234,7 @@ export const simulateMobile = () => {
 
 // Error boundary testing
 export const ErrorBoundary = ({ children }: { children: React.ReactNode }) => {
-  const [hasError, setHasError] = React.useState(false);
-
-  React.useEffect(() => {
-    const handleError = () => setHasError(true);
-    window.addEventListener('error', handleError);
-    return () => window.removeEventListener('error', handleError);
-  }, []);
-
-  if (hasError) {
-    return <div>Something went wrong</div>;
-  }
-
-  return <>{children}</>;
+  return React.createElement(React.Fragment, null, children);
 };
 
 // Network testing helpers
