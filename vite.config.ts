@@ -22,5 +22,9 @@ export default defineConfig({
       strict: true,
       deny: ["**/.*"],
     },
+    allowedHosts: ["healthcheck.railway.app"],
+  },
+  preview: {
+    allowedHosts: ["healthcheck.railway.app"],
   },
 });
