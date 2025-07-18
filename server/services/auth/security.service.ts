@@ -1,5 +1,5 @@
 import { randomBytes, createHash, scryptSync } from 'node:crypto';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 import { Request, Response, NextFunction } from 'express';
 
 export interface SecurityConfig {
@@ -131,8 +131,9 @@ export class SecurityService {
       // Custom key generator that can handle both IP and user-based limiting
       keyGenerator: (req: any) => {
         const userId = req.headers['x-user-id'] as string;
-        const ip = req.ip || req.connection?.remoteAddress || 'unknown';
-        return userId ? `user:${userId}` : `ip:${ip}`;
+        if (userId) return `user:${userId}`;
+        // Use express-rate-limit's ipKeyGenerator for IPv6 compatibility
+        return `ip:${ipKeyGenerator(req)}`;
       }
     });
   }
