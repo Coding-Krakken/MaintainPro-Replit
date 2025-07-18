@@ -315,7 +315,7 @@ export class EscalationEngine {
       return {
         workOrderId,
         escalationLevel: newEscalationLevel,
-        escalatedToUserId,
+        escalatedToUserId: escalateToUserId,
         escalatedAt: new Date(),
         reason: `Manual escalation: ${reason}`,
         previousAssignee: workOrder.assignedTo || undefined,

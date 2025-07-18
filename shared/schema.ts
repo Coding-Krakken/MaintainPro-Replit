@@ -204,12 +204,14 @@ export const insertWorkOrderSchema = createInsertSchema(workOrders, {
   estimatedHours: z.string().optional(),
   actualHours: z.string().optional(),
   requestedBy: z.string().uuid().optional(),
+  assignedTo: z.string().uuid().optional(),
   equipmentId: z.string().uuid().optional(),
   warehouseId: z.string().uuid().optional(),
   dueDate: z.union([z.string(), z.date()]).optional(),
   escalated: z.boolean().optional(),
   escalationLevel: z.number().optional(),
   followUp: z.boolean().optional(),
+  updatedAt: z.date().optional(),
 });
 
 export const insertPartSchema = createInsertSchema(parts);
