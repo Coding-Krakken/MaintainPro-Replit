@@ -616,10 +616,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/escalation/rules/:warehouseId", authenticateRequest, async (req, res) => {
     try {
       const { escalationEngine } = await import('./services/escalation-engine');
-      await escalationEngine.updateEscalationRules(req.params.warehouseId, req.body);
-      res.json({ message: "Escalation rules updated successfully" });
+      const { ruleId, ...updates } = req.body;
+      if (ruleId) {
+        // Update existing rule
+        await escalationEngine.updateEscalationRule(ruleId, updates);
+      } else {
+        // Create new rule
+        const newRuleId = await escalationEngine.createEscalationRule({
+          ...updates,
+          warehouseId: req.params.warehouseId
+        });
+        return res.json({ message: "Escalation rule created successfully", ruleId: newRuleId });
+      }
+      res.json({ message: "Escalation rule updated successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to update escalation rules" });
+      res.status(500).json({ message: "Failed to update escalation rule" });
+    }
+  });
+
+  // Get escalation history for a work order
+  app.get("/api/escalation/history/:workOrderId", authenticateRequest, async (req, res) => {
+    try {
+      const { escalationEngine } = await import('./services/escalation-engine');
+      const history = await escalationEngine.getEscalationHistory(req.params.workOrderId);
+      res.json(history);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get escalation history" });
     }
   });
 
