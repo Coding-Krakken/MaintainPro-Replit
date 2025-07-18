@@ -16,6 +16,7 @@ import QRScanner from '../qr/QRScanner';
 import FileUpload from '../FileUpload';
 
 const workOrderSchema = z.object({
+  foNumber: z.string().min(1, 'FO Number is required'),
   type: z.enum(['corrective', 'preventive', 'emergency']),
   description: z.string().min(10, 'Description must be at least 10 characters'),
   area: z.string().optional(),
@@ -46,6 +47,7 @@ export default function WorkOrderForm({ onSuccess, onCancel, initialData }: Work
   const form = useForm<WorkOrderFormData>({
     resolver: zodResolver(workOrderSchema),
     defaultValues: {
+      foNumber: `WO-${new Date().getFullYear()}-${String(Date.now()).slice(-3)}`,
       type: 'corrective',
       priority: 'medium',
       ...initialData,
@@ -106,6 +108,25 @@ export default function WorkOrderForm({ onSuccess, onCancel, initialData }: Work
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* FO Number */}
+          <FormField
+            control={form.control}
+            name="foNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>FO Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="e.g., WO-2024-001"
+                    data-testid="fo-number-input"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           {/* Equipment Selection with QR Scanner */}
           <FormField
             control={form.control}
@@ -153,6 +174,7 @@ export default function WorkOrderForm({ onSuccess, onCancel, initialData }: Work
                   <Textarea
                     placeholder="Describe the issue or maintenance required..."
                     rows={3}
+                    data-testid="description-input"
                     {...field}
                   />
                 </FormControl>
@@ -194,7 +216,7 @@ export default function WorkOrderForm({ onSuccess, onCancel, initialData }: Work
                   <FormLabel>Priority</FormLabel>
                   <FormControl>
                     <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger>
+                      <SelectTrigger data-testid="priority-select">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>

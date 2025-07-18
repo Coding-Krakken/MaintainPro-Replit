@@ -34,40 +34,44 @@ export default function DashboardStats() {
 
   const statCards = [
     {
-      title: 'Active Work Orders',
-      value: stats?.activeWorkOrders || 0,
+      title: 'Total Work Orders',
+      value: stats?.totalWorkOrders || 0,
       change: '+12% from last week',
       changeType: 'positive' as const,
       icon: TrendingUp,
       iconBg: 'bg-primary-50',
       iconColor: 'text-primary-600',
+      testId: 'total-work-orders',
     },
     {
-      title: 'Overdue Tasks',
-      value: stats?.overdueWorkOrders || 0,
+      title: 'Pending Work Orders',
+      value: stats?.pendingWorkOrders || 0,
       change: 'Requires immediate attention',
       changeType: 'negative' as const,
       icon: AlertTriangle,
       iconBg: 'bg-error-50',
       iconColor: 'text-error-600',
+      testId: 'pending-work-orders',
     },
     {
-      title: 'Equipment Online',
-      value: `${stats?.equipmentOnlinePercentage || 0}%`,
-      change: `${stats?.activeEquipment || 0} of ${stats?.totalEquipment || 0} assets`,
-      changeType: 'neutral' as const,
+      title: 'Completed Work Orders',
+      value: stats?.completedWorkOrders || 0,
+      change: `${stats?.completedWorkOrders || 0} completed this week`,
+      changeType: 'positive' as const,
       icon: CheckCircle,
       iconBg: 'bg-success-50',
       iconColor: 'text-success-600',
+      testId: 'completed-work-orders',
     },
     {
-      title: 'Low Stock Items',
-      value: stats?.lowStockParts || 0,
-      change: 'Need reordering',
-      changeType: 'warning' as const,
+      title: 'Active Equipment',
+      value: stats?.activeEquipment || 0,
+      change: `${stats?.activeEquipment || 0} of ${stats?.totalEquipment || 0} assets`,
+      changeType: 'neutral' as const,
       icon: Package,
       iconBg: 'bg-warning-50',
       iconColor: 'text-warning-600',
+      testId: 'active-equipment',
     },
   ];
 
@@ -75,7 +79,7 @@ export default function DashboardStats() {
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {statCards.map((stat) => (
         <Card key={stat.title} className="shadow-sm border border-gray-200">
-          <CardContent className="p-6">
+          <CardContent className="p-6" data-testid={stat.testId}>
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">{stat.title}</p>

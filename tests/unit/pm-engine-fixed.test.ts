@@ -210,9 +210,6 @@ describe('PMEngine', () => {
       vi.mocked(storage.getPmTemplates).mockResolvedValue([mockTemplate]);
       vi.mocked(storage.getEquipment).mockResolvedValue([mockEquipment]);
       vi.mocked(storage.getWorkOrders).mockResolvedValue([]);
-      vi.mocked(storage.getProfiles).mockResolvedValue([
-        { id: 'supervisor-1', role: 'supervisor', warehouseId: mockWarehouseId, email: 'super@test.com', name: 'Supervisor', active: true },
-      ]);
       vi.mocked(storage.createWorkOrder).mockResolvedValue(mockWorkOrder);
       vi.mocked(storage.createWorkOrderChecklistItem).mockResolvedValue({
         id: 'checklist-1',

@@ -1,5 +1,9 @@
-import { drizzle } from 'drizzle-orm/neon-http';
-import { neon } from '@neondatabase/serverless';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { drizzle } from 'drizzle-orm/node-postgres';
+import pkg from 'pg';
+const { Pool } = pkg;
 import * as schema from '../shared/schema';
 
 if (!process.env.DATABASE_URL) {
@@ -8,9 +12,13 @@ if (!process.env.DATABASE_URL) {
 }
 
 console.log('Initializing database connection...');
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
 
-const sql = neon(process.env.DATABASE_URL);
-export const db = drizzle(sql, { schema });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+export const db = drizzle(pool, { schema });
 
 console.log('Database connection initialized successfully');
 

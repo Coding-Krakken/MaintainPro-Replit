@@ -20,8 +20,42 @@ describe('Work Orders API Integration', () => {
     // Register routes
     await registerRoutes(app)
     
-    // Add test data
+    // Add test data - create dependencies first
     try {
+      // Create warehouse first
+      await storage.createWarehouse({
+        id: '00000000-0000-0000-0000-000000000001',
+        name: 'Test Warehouse',
+        location: 'Test Location',
+        managerId: null,
+        active: true,
+      });
+
+      // Create profile/user
+      await storage.createProfile({
+        id: '00000000-0000-0000-0000-000000000001',
+        email: 'test@example.com',
+        name: 'Test User',
+        role: 'technician',
+        warehouseId: '00000000-0000-0000-0000-000000000001',
+        active: true,
+      });
+
+      // Create equipment
+      await storage.createEquipment({
+        id: '00000000-0000-0000-0000-000000000001',
+        assetTag: 'TEST-001',
+        model: 'Test Model',
+        manufacturer: 'Test Manufacturer',
+        serialNumber: 'SN123456',
+        description: 'Test Equipment',
+        area: 'Test Area',
+        status: 'active',
+        criticality: 'medium',
+        warehouseId: '00000000-0000-0000-0000-000000000001',
+      });
+      
+      // Now create work order
       await storage.createWorkOrder({
         id: '00000000-0000-0000-0000-000000000001',
         foNumber: 'WO-TEST-001',
@@ -33,21 +67,9 @@ describe('Work Orders API Integration', () => {
         warehouseId: '00000000-0000-0000-0000-000000000001',
         equipmentId: '00000000-0000-0000-0000-000000000001',
         area: 'Test Area',
-        createdAt: new Date(),
-        updatedAt: new Date(),
       });
-      
-      await storage.createEquipment({
-        id: '00000000-0000-0000-0000-000000000001',
-        name: 'Test Equipment',
-        model: 'TEST-001',
-        serialNumber: 'SN123456',
-        location: 'Test Location',
-        status: 'active',
-        warehouseId: '00000000-0000-0000-0000-000000000001',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+
+      console.log('Database initialized with sample data');
     } catch (error) {
       console.error('Error creating test data:', error);
     }

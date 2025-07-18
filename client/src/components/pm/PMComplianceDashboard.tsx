@@ -53,7 +53,6 @@ export default function PMComplianceDashboard() {
       if (!response.ok) throw new Error('Failed to fetch PM compliance data');
       return response.json();
     },
-    refetchInterval: 30000, // Refresh every 30 seconds for real-time updates
   });
 
   const { data: equipment = [] } = useQuery({

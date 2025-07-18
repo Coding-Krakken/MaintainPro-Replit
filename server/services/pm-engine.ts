@@ -102,7 +102,7 @@ export class PMEngine {
       
       return generatedWorkOrders;
     } catch (error) {
-      console.error('Error generating PM work orders:', error);
+      // Don't log errors here - let the calling method handle them
       throw error;
     }
   }

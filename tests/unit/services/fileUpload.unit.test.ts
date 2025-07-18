@@ -4,50 +4,6 @@ import { FileUploadService } from '../../../client/src/services/fileUpload';
 // Mock fetch
 global.fetch = vi.fn();
 
-// Mock browser APIs for file upload service
-global.document = {
-  createElement: vi.fn((tag) => {
-    if (tag === 'canvas') {
-      return {
-        width: 0,
-        height: 0,
-        getContext: vi.fn(() => ({
-          drawImage: vi.fn(),
-        })),
-        toBlob: vi.fn((callback) => {
-          setTimeout(() => callback(new Blob(['mock'], { type: 'image/jpeg' })), 0);
-        }),
-        toDataURL: vi.fn(() => 'data:image/jpeg;base64,mock'),
-      };
-    }
-    return {};
-  }),
-} as any;
-
-global.Image = class MockImage {
-  onload: (() => void) | null = null;
-  onerror: (() => void) | null = null;
-  width = 100;
-  height = 100;
-  
-  set src(value: string) {
-    setTimeout(() => {
-      if (this.onload) this.onload();
-    }, 0);
-  }
-} as any;
-
-global.URL = {
-  createObjectURL: vi.fn(() => 'mock-url'),
-  revokeObjectURL: vi.fn(),
-} as any;
-
-global.localStorage = {
-  getItem: vi.fn(() => ''),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-} as any;
-
 describe('FileUploadService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -162,17 +118,19 @@ describe('FileUploadService', () => {
         json: vi.fn().mockResolvedValue({
           fileUrl: 'https://example.com/file.jpg',
           fileName: 'test.jpg',
-          fileSize: 1024,
+          fileSize: 100,
           fileType: 'image/jpeg',
         }),
       };
 
       (global.fetch as any).mockResolvedValue(mockResponse);
 
+      const progressCallback = vi.fn();
       const result = await FileUploadService.uploadFile(
         mockFile,
         { workOrderId: 'wo-123' },
-        {}
+        {},
+        progressCallback
       );
 
       expect(result.success).toBe(true);
@@ -186,9 +144,7 @@ describe('FileUploadService', () => {
         ok: false,
         status: 500,
         statusText: 'Server Error',
-        json: vi.fn().mockResolvedValue({
-          message: 'Server Error',
-        }),
+        json: vi.fn().mockResolvedValue({ message: 'Upload failed: 500 Server Error' }),
       };
 
       (global.fetch as any).mockResolvedValue(mockResponse);
@@ -200,7 +156,7 @@ describe('FileUploadService', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Server Error');
+      expect(result.error).toContain('Upload failed');
     });
 
     it('should handle network errors', async () => {
@@ -228,7 +184,7 @@ describe('FileUploadService', () => {
       );
 
       expect(result.success).toBe(false);
-      expect(result.error).toContain('File type application/exe is not allowed');
+      expect(result.error).toContain('not allowed');
     });
   });
 

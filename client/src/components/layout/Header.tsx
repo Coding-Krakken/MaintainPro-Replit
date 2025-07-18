@@ -61,6 +61,7 @@ export default function Header({ onMobileMenuToggle, showMobileMenuButton }: Hea
             size="icon"
             onClick={onMobileMenuToggle}
             className="lg:hidden"
+            data-testid="mobile-menu-button"
           >
             <Menu className="w-6 h-6" />
           </Button>

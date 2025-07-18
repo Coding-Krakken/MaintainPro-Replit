@@ -35,6 +35,9 @@ import {
 } from "@shared/schema";
 
 export interface IStorage {
+  // Initialize database with sample data
+  initializeData(): Promise<void>;
+  
   // Profiles
   getProfile(id: string): Promise<Profile | undefined>;
   getProfiles(): Promise<Profile[]>;
@@ -59,7 +62,6 @@ export interface IStorage {
   getWorkOrder(id: string): Promise<WorkOrder | undefined>;
   createWorkOrder(workOrder: InsertWorkOrder): Promise<WorkOrder>;
   updateWorkOrder(id: string, workOrder: Partial<InsertWorkOrder>): Promise<WorkOrder>;
-  deleteWorkOrder(id: string): Promise<void>;
   getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]>;
   
   // Work Order Checklist Items
@@ -131,6 +133,12 @@ export class MemStorage implements IStorage {
     this.systemLogs = new Map();
     
     this.seedData();
+  }
+
+  // Initialize with sample data
+  async initializeData(): Promise<void> {
+    // In-memory storage doesn't need initialization
+    console.log('Using in-memory storage - no initialization needed');
   }
 
   private generateId(): string {
@@ -563,7 +571,7 @@ export class MemStorage implements IStorage {
   }
 
   async createEquipment(insertEquipment: any): Promise<Equipment> {
-    const id = insertEquipment.id || this.generateId();
+    const id = this.generateId();
     const equipment: Equipment = {
       id,
       ...insertEquipment,
@@ -604,8 +612,8 @@ export class MemStorage implements IStorage {
   }
 
   async createWorkOrder(insertWorkOrder: InsertWorkOrder): Promise<WorkOrder> {
-    const id = (insertWorkOrder as any).id || this.generateId();
-    const foNumber = (insertWorkOrder as any).foNumber || `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
+    const id = this.generateId();
+    const foNumber = `WO-${String(this.workOrders.size + 1).padStart(3, '0')}`;
     const workOrder: WorkOrder = {
       id,
       foNumber,
@@ -628,13 +636,6 @@ export class MemStorage implements IStorage {
     };
     this.workOrders.set(id, updated);
     return updated;
-  }
-
-  async deleteWorkOrder(id: string): Promise<void> {
-    const existing = this.workOrders.get(id);
-    if (!existing) throw new Error('Work order not found');
-    
-    this.workOrders.delete(id);
   }
 
   async getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]> {
@@ -834,5 +835,28 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Fallback to in-memory storage if database connection fails
-export const storage = new MemStorage();
+import { DatabaseStorage } from './dbStorage';
+
+// Use database storage if DATABASE_URL is available, otherwise fallback to in-memory
+let storage: IStorage;
+
+if (process.env.DATABASE_URL) {
+  storage = new DatabaseStorage();
+  // Initialize database with sample data
+  (async () => {
+    try {
+      await storage.initializeData();
+      console.log('Database initialized with sample data');
+    } catch (error) {
+      console.error('Failed to initialize database:', error);
+      console.log('Falling back to in-memory storage...');
+      // Fall back to in-memory storage
+      storage = new MemStorage();
+    }
+  })();
+} else {
+  console.log('DATABASE_URL not found, using in-memory storage');
+  storage = new MemStorage();
+}
+
+export { storage };

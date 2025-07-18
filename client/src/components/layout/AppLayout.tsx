@@ -3,6 +3,7 @@ import { useIsMobile } from '../../hooks/use-mobile';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import MobileMenu from './MobileMenu';
+import OfflineIndicator from '../OfflineIndicator';
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -36,6 +37,9 @@ export default function AppLayout({ children }: AppLayoutProps) {
           {children}
         </main>
       </div>
+      
+      {/* Offline Indicator */}
+      <OfflineIndicator />
     </div>
   );
 }

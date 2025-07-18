@@ -8,35 +8,39 @@
     - img
   - button:
     - img
-  - button "1":
+  - button:
     - img
-    - text: "1"
-  - button "JS":
-    - text: JS
+  - button "TU":
+    - text: TU
     - img
 - main:
   - heading "Maintenance Dashboard" [level=1]
   - paragraph: Overview of maintenance operations and key performance indicators
-  - paragraph: Active Work Orders
+  - button "Last 7 Days":
+    - img
+    - text: Last 7 Days
+  - paragraph: Total Work Orders
   - paragraph: "0"
   - paragraph: +12% from last week
   - img
-  - paragraph: Overdue Tasks
+  - paragraph: Pending Work Orders
   - paragraph: "0"
   - paragraph: Requires immediate attention
   - img
-  - paragraph: Equipment Online
-  - paragraph: 0%
-  - paragraph: 0 of 0 assets
-  - img
-  - paragraph: Low Stock Items
+  - paragraph: Completed Work Orders
   - paragraph: "0"
-  - paragraph: Need reordering
+  - paragraph: 0 completed this week
+  - img
+  - paragraph: Active Equipment
+  - paragraph: "0"
+  - paragraph: 0 of 0 assets
   - img
   - text: Recent Work Orders
   - combobox: All Status
   - combobox: All Priority
   - button "+ New Work Order"
+  - paragraph: No work orders found
+  - button "Create First Work Order"
   - text: Quick Actions
   - button "Scan QR Code":
     - img
@@ -51,12 +55,5 @@
   - text: Upcoming Maintenance
   - paragraph: No upcoming maintenance scheduled
   - text: Recent Alerts
-  - img
-  - paragraph: Low Stock Alert
-  - paragraph: Part HYT106.0432 is below reorder point
-  - paragraph: about 4 hours ago
-  - img
-  - paragraph: Work Order Overdue
-  - paragraph: Work Order WO-001 is past due date
-  - paragraph: about 6 hours ago
+  - paragraph: No recent alerts
 ```

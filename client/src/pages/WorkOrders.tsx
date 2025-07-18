@@ -75,12 +75,13 @@ export default function WorkOrders() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10"
+                  data-testid="search-input"
                 />
               </div>
 
               {/* Status Filter */}
               <Select onValueChange={handleStatusFilter}>
-                <SelectTrigger>
+                <SelectTrigger data-testid="status-filter">
                   <SelectValue placeholder="All Status" />
                 </SelectTrigger>
                 <SelectContent>

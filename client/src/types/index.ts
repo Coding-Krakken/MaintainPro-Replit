@@ -3,6 +3,9 @@ export * from '../../../shared/schema';
 export interface DashboardStats {
   activeWorkOrders: number;
   overdueWorkOrders: number;
+  totalWorkOrders: number;
+  pendingWorkOrders: number;
+  completedWorkOrders: number;
   totalEquipment: number;
   activeEquipment: number;
   equipmentOnlinePercentage: number;

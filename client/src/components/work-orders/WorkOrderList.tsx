@@ -93,7 +93,7 @@ export default function WorkOrderList() {
               </Button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4" data-testid="work-order-list">
               {workOrders?.map((workOrder) => (
                 <WorkOrderCard key={workOrder.id} workOrder={workOrder} />
               ))}

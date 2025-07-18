@@ -12,7 +12,7 @@ export default defineConfig({
     ['junit', { outputFile: 'test-results/results.xml' }],
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:8080',
+    baseURL: process.env.BASE_URL || 'http://localhost:5000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -43,7 +43,7 @@ export default defineConfig({
   ],
   webServer: {
     command: 'npm run dev',
-    port: 8080,
+    port: 5000,
     reuseExistingServer: !process.env.CI,
   },
 })

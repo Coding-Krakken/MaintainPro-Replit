@@ -1,9 +1,10 @@
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
-const express = require("express");
-import type { Request, Response, NextFunction } from "express";
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { pmScheduler } from "./services/pm-scheduler";
 
 const app = express();
 app.use(express.json());
@@ -39,49 +40,40 @@ app.use((req, res, next) => {
   next();
 });
 
+// Start PM scheduler
+pmScheduler.start();
+
 // Initialize the app
 async function initializeApp() {
-  try {
-    console.log('Starting server initialization...');
-    console.log('Environment:', process.env.NODE_ENV);
-    console.log('Port:', process.env.PORT || 5000);
-    
-    const server = await registerRoutes(app);
-    console.log('Routes registered successfully');
+  const server = await registerRoutes(app);
 
-    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-      const status = err.status || err.statusCode || 500;
-      const message = err.message || "Internal Server Error";
+  app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+    const status = err.status || err.statusCode || 500;
+    const message = err.message || "Internal Server Error";
 
-      // Log error in all environments for debugging
+    // Log error in development
+    if (process.env.NODE_ENV === 'development') {
       console.error('Server Error:', err);
-
-      res.status(status).json({ message });
-      
-      // Don't throw in test environment to avoid test failures
-      if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') {
-        // Log but don't throw in production to keep server running
-        console.error('Production error (not throwing):', err);
-      }
-    });
-
-    // importantly only setup vite in development and after
-    // setting up all the other routes so the catch-all route
-    // doesn't interfere with the other routes
-    if (app.get("env") === "development") {
-      console.log('Setting up Vite for development...');
-      await setupVite(app, server);
-    } else {
-      console.log('Setting up static file serving for production...');
-      serveStatic(app);
     }
 
-    console.log('Server initialization completed successfully');
-    return server;
-  } catch (error) {
-    console.error('Failed to initialize server:', error);
-    throw error;
+    res.status(status).json({ message });
+    
+    // Don't throw in test environment to avoid test failures
+    if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') {
+      throw err;
+    }
+  });
+
+  // importantly only setup vite in development and after
+  // setting up all the other routes so the catch-all route
+  // doesn't interfere with the other routes
+  if (process.env.NODE_ENV === "development") {
+    await setupVite(app, server);
+  } else {
+    serveStatic(app);
   }
+
+  return server;
 }
 
 // Initialize app for testing
@@ -93,56 +85,34 @@ if (process.env.NODE_ENV === 'test') {
 export { app };
 
 // Only run server if this file is being executed directly
-// Check if this is the main module being executed
-const isMainModule = import.meta.url === `file://${process.argv[1]}` || 
-                    process.env.NODE_ENV === 'development' ||
-                    process.env.NODE_ENV === 'production';
-
-if (isMainModule && process.env.NODE_ENV !== 'test') {
+if (process.env.NODE_ENV !== 'test') {
   (async () => {
-    try {
-      console.log('Starting server...');
-      const server = await initializeApp();
-      
-      // Serve the app on configured port (Railway sets PORT=8080 by default)
-      const port = process.env.PORT || 8080;
-      
-      // Validate port configuration
-      if (!port || isNaN(Number(port))) {
-        throw new Error(`Invalid port configuration: ${port}`);
-      }
-      
-      console.log(`Configured port: ${port} (from ${process.env.PORT ? 'environment' : 'default'})`);
-      
-      server.listen({
-        port: Number(port),
-        host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
-      }, () => {
-        log(`serving on port ${port}`);
-        console.log(`Server is running on http://${process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost"}:${port}`);
-        console.log(`Railway will proxy external traffic to this port`);
-        
-        // Start PM scheduler after server is running (optional)
-        (async () => {
-          try {
-            const pmSchedulerModule = await import("./services/pm-scheduler");
-            pmSchedulerModule.pmScheduler.start();
-            console.log('PM Scheduler started successfully');
-          } catch (schedulerError) {
-            console.error('Failed to start PM scheduler:', schedulerError);
-            // Don't fail the server startup if scheduler fails
-          }
-        })();
-      });
+    const server = await initializeApp();
+    
+    // Serve the app on configured port (default 5000)
+    const port = process.env.PORT || 5000;
+    const httpServer = server.listen({
+      port: Number(port),
+      host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
+    }, () => {
+      log(`serving on port ${port}`);
+    });
 
-      // Handle server errors
-      server.on('error', (error) => {
-        console.error('Server error:', error);
+    // Graceful shutdown handling
+    process.on('SIGTERM', () => {
+      log('SIGTERM received, shutting down gracefully');
+      httpServer.close(() => {
+        log('HTTP server closed');
+        process.exit(0);
       });
+    });
 
-    } catch (error) {
-      console.error('Failed to start server:', error);
-      process.exit(1);
-    }
+    process.on('SIGINT', () => {
+      log('SIGINT received, shutting down gracefully');
+      httpServer.close(() => {
+        log('HTTP server closed');
+        process.exit(0);
+      });
+    });
   })();
 }

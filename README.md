@@ -30,6 +30,7 @@ MaintainPro is a production-ready, enterprise-grade Computerized Maintenance Man
 - **📱 Mobile Responsive**: Optimized for field technicians and mobile operations
 - **🔄 Offline Capability**: Robust offline functionality with automatic sync
 - **🎯 PM Automation**: Intelligent preventive maintenance scheduling ✨ **NEW**
+- **🏢 Vendor & Contractor Management**: Manage vendors and contractors with integrated profiles and API validation ✨ **NEW**
 
 ## 🛠️ Technical Status
 

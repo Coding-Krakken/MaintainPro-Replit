@@ -10,6 +10,7 @@ import WorkOrders from "./pages/WorkOrders";
 import Equipment from "./pages/Equipment";
 import Inventory from "./pages/Inventory";
 import PreventiveMaintenance from "./pages/PreventiveMaintenance";
+import Vendors from "./pages/Vendors";
 import Auth from "./pages/Auth";
 import NotFound from "@/pages/not-found";
 
@@ -68,6 +69,11 @@ function AppRoutes() {
       <Route path="/preventive">
         <ProtectedRoute>
           <PreventiveMaintenance />
+        </ProtectedRoute>
+      </Route>
+      <Route path="/vendors">
+        <ProtectedRoute>
+          <Vendors />
         </ProtectedRoute>
       </Route>
       <Route component={NotFound} />

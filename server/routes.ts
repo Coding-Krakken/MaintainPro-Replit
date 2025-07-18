@@ -6,7 +6,8 @@ import {
   insertEquipmentSchema, 
   insertPartSchema,
   insertNotificationSchema,
-  insertAttachmentSchema
+  insertAttachmentSchema,
+  insertVendorSchema
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -104,16 +105,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Invalid email format" });
       }
       
-      // Simple validation for testing
-      if (email === 'test@example.com' && password === 'password') {
-        const user = {
+      // Test users for different roles
+      const testUsers = {
+        'test@example.com': {
           id: 'test-user-id',
           email: 'test@example.com',
-          name: 'Test User',
+          firstName: 'Test',
+          lastName: 'User',
           role: 'technician',
           warehouseId: '1'
-        };
-        
+        },
+        'supervisor@maintainpro.com': {
+          id: 'supervisor-user-id',
+          email: 'supervisor@maintainpro.com',
+          firstName: 'John',
+          lastName: 'Smith',
+          role: 'supervisor',
+          warehouseId: '1'
+        },
+        'supervisor@example.com': {
+          id: 'supervisor-user-id-2',
+          email: 'supervisor@example.com',
+          firstName: 'Jane',
+          lastName: 'Smith',
+          role: 'supervisor',
+          warehouseId: '1'
+        },
+        'manager@example.com': {
+          id: 'manager-user-id',
+          email: 'manager@example.com',
+          firstName: 'Mike',
+          lastName: 'Johnson',
+          role: 'manager',
+          warehouseId: '1'
+        },
+        'technician@example.com': {
+          id: 'technician-user-id',
+          email: 'technician@example.com',
+          firstName: 'Sarah',
+          lastName: 'Wilson',
+          role: 'technician',
+          warehouseId: '1'
+        }
+      };
+
+      // Check if user exists and password is correct
+      const user = testUsers[email as keyof typeof testUsers];
+      if (user && password === 'password') {
         res.json({
           user,
           token: 'mock-jwt-token'
@@ -138,6 +176,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Profiles
   app.get("/api/profiles/me", async (req, res) => {
     try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      
+      // For testing, return mock user based on the token
+      if (token === 'mock-jwt-token') {
+        const userId = req.headers['x-user-id'] || 'supervisor-user-id';
+        
+        // Mock user data for testing
+        const mockUsers = {
+          'test-user-id': {
+            id: 'test-user-id',
+            email: 'test@example.com',
+            firstName: 'Test',
+            lastName: 'User',
+            role: 'technician',
+            warehouseId: '1',
+            active: true,
+          },
+          'supervisor-user-id': {
+            id: 'supervisor-user-id',
+            email: 'supervisor@maintainpro.com',
+            firstName: 'John',
+            lastName: 'Smith',
+            role: 'supervisor',
+            warehouseId: '1',
+            active: true,
+          },
+          'manager-user-id': {
+            id: 'manager-user-id',
+            email: 'manager@example.com',
+            firstName: 'Mike',
+            lastName: 'Johnson',
+            role: 'manager',
+            warehouseId: '1',
+            active: true,
+          },
+          'technician-user-id': {
+            id: 'technician-user-id',
+            email: 'technician@example.com',
+            firstName: 'Sarah',
+            lastName: 'Wilson',
+            role: 'technician',
+            warehouseId: '1',
+            active: true,
+          }
+        };
+        
+        const mockUser = mockUsers[userId as keyof typeof mockUsers];
+        if (mockUser) {
+          return res.json(mockUser);
+        }
+      }
+      
+      // Fallback to database lookup
       const userId = getCurrentUser(req);
       const profile = await storage.getProfile(userId);
       if (!profile) {
@@ -479,13 +570,76 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Vendors
-  app.get("/api/vendors", async (req, res) => {
+  app.get("/api/vendors", authenticateRequest, async (req, res) => {
     try {
       const warehouseId = getCurrentWarehouse(req);
       const vendors = await storage.getVendors(warehouseId);
       res.json(vendors);
     } catch (error) {
       res.status(500).json({ message: "Failed to get vendors" });
+    }
+  });
+
+  app.get("/api/vendors/:id", authenticateRequest, async (req, res) => {
+    try {
+      const vendor = await storage.getVendor(req.params.id);
+      if (!vendor) {
+        return res.status(404).json({ message: "Vendor not found" });
+      }
+      res.json(vendor);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get vendor" });
+    }
+  });
+
+  app.post("/api/vendors", authenticateRequest, async (req, res) => {
+    try {
+      const vendorData = {
+        ...req.body,
+        id: req.body.id || crypto.randomUUID(),
+        warehouseId: req.body.warehouseId || getCurrentWarehouse(req),
+        type: req.body.type || 'supplier',
+        active: req.body.active !== undefined ? req.body.active : true,
+      };
+      
+      const parsedData = insertVendorSchema.parse(vendorData);
+      const vendor = await storage.createVendor(parsedData);
+      res.status(201).json(vendor);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid vendor data", errors: error.errors });
+      }
+      res.status(500).json({ message: "Failed to create vendor" });
+    }
+  });
+
+  app.patch("/api/vendors/:id", authenticateRequest, async (req, res) => {
+    try {
+      const vendorData = insertVendorSchema.partial().parse(req.body);
+      const vendor = await storage.updateVendor(req.params.id, vendorData);
+      res.json(vendor);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid vendor data", errors: error.errors });
+      }
+      if (error.message === 'Vendor not found') {
+        return res.status(404).json({ message: "Vendor not found" });
+      }
+      res.status(500).json({ message: "Failed to update vendor" });
+    }
+  });
+
+  app.delete("/api/vendors/:id", authenticateRequest, async (req, res) => {
+    try {
+      const vendor = await storage.getVendor(req.params.id);
+      if (!vendor) {
+        return res.status(404).json({ message: "Vendor not found" });
+      }
+      
+      await storage.deleteVendor(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ message: "Failed to delete vendor" });
     }
   });
 

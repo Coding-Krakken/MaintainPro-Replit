@@ -188,11 +188,32 @@ export const insertWarehouseSchema = createInsertSchema(warehouses);
 
 export const insertEquipmentSchema = createInsertSchema(equipment);
 
-export const insertWorkOrderSchema = createInsertSchema(workOrders);
+// Enhanced work order schema with proper validation
+export const insertWorkOrderSchema = createInsertSchema(workOrders, {
+  type: z.enum(['corrective', 'preventive', 'emergency']),
+  status: z.enum(['new', 'assigned', 'in_progress', 'completed', 'verified', 'closed']),
+  priority: z.enum(['low', 'medium', 'high', 'critical']),
+  foNumber: z.string().min(1, 'FO Number is required'),
+  description: z.string().min(1, 'Description is required'),
+}).extend({
+  area: z.string().optional(),
+  assetModel: z.string().optional(),
+  notes: z.string().optional(),
+  estimatedHours: z.string().optional(),
+  actualHours: z.string().optional(),
+});
 
 export const insertPartSchema = createInsertSchema(parts);
 
-export const insertVendorSchema = createInsertSchema(vendors);
+// Enhanced vendor schema with proper validation
+export const insertVendorSchema = createInsertSchema(vendors, {
+  type: z.enum(['supplier', 'contractor']),
+  name: z.string().min(1, 'Name is required'),
+  email: z.string().email('Invalid email format').optional(),
+  phone: z.string().optional(),
+  address: z.string().optional(),
+  contactPerson: z.string().optional(),
+});
 
 export const insertPmTemplateSchema = createInsertSchema(pmTemplates);
 

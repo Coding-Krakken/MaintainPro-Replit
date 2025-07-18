@@ -113,6 +113,7 @@ describe('PMEngine', () => {
         id: mockEquipmentId,
         warehouseId: mockWarehouseId,
         assetTag: 'TEST-001',
+        foNumber: 'FO-001',
         model: 'Test Model',
         manufacturer: 'Test Manufacturer',
         serialNumber: 'SN-001',
@@ -120,10 +121,8 @@ describe('PMEngine', () => {
         area: 'Test Area',
         status: 'active',
         criticality: 'medium',
-        installDate: new Date(),
+        installationDate: new Date(),
         createdAt: new Date(),
-        warrantyExpiry: null,
-        specifications: null,
       };
 
       const mockTemplates: PmTemplate[] = [{
@@ -133,8 +132,7 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'monthly',
-        customFields: null,
-        active: true,
+        estimatedDuration: 60,
         createdAt: new Date(),
       }];
 
@@ -156,6 +154,7 @@ describe('PMEngine', () => {
         id: mockEquipmentId,
         warehouseId: mockWarehouseId,
         assetTag: 'TEST-001',
+        foNumber: 'FO-001',
         model: 'Test Model',
         manufacturer: 'Test Manufacturer',
         serialNumber: 'SN-001',
@@ -163,10 +162,8 @@ describe('PMEngine', () => {
         area: 'Test Area',
         status: 'active',
         criticality: 'medium',
-        installDate: new Date(),
+        installationDate: new Date(),
         createdAt: new Date(),
-        warrantyExpiry: null,
-        specifications: null,
       };
 
       const mockTemplate: PmTemplate = {
@@ -176,8 +173,7 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'daily',
-        customFields: null,
-        active: true,
+        estimatedDuration: 60,
         createdAt: new Date(),
       };
 
@@ -192,44 +188,39 @@ describe('PMEngine', () => {
         status: 'new',
         priority: 'medium',
         requestedBy: 'system',
-        assignedTo: null,
+        assignedTo: [],
         equipmentId: mockEquipmentId,
         createdAt: new Date(),
         escalated: false,
         followUp: false,
         escalationLevel: 0,
-        updatedAt: new Date(),
-        dueDate: null,
-        verifiedBy: null,
-        estimatedHours: null,
-        actualHours: null,
-        notes: null,
-        completedAt: null,
+        lastUpdated: new Date(),
       };
 
       vi.mocked(storage.getPmTemplates).mockResolvedValue([mockTemplate]);
       vi.mocked(storage.getEquipment).mockResolvedValue([mockEquipment]);
       vi.mocked(storage.getWorkOrders).mockResolvedValue([]);
-      vi.mocked(storage.getProfiles).mockResolvedValue([
-        { id: 'supervisor-1', role: 'supervisor', warehouseId: mockWarehouseId, email: 'super@test.com', name: 'Supervisor', active: true },
-      ]);
       vi.mocked(storage.createWorkOrder).mockResolvedValue(mockWorkOrder);
       vi.mocked(storage.createWorkOrderChecklistItem).mockResolvedValue({
         id: 'checklist-1',
         workOrderId: mockWorkOrder.id,
         component: mockTemplate.component,
         action: mockTemplate.action,
-        completed: false,
-        completedBy: null,
-        completedAt: null,
+        status: 'pending',
         notes: null,
+        completedAt: null,
+        completedBy: null,
+        customFieldData: null,
         createdAt: new Date(),
       });
+      vi.mocked(storage.getProfiles).mockResolvedValue([]);
 
-      const result = await pmEngine.generatePMWorkOrders(mockWarehouseId);
+      const generatedOrders = await pmEngine.generatePMWorkOrders(mockWarehouseId);
 
-      expect(result).toHaveLength(1);
-      expect(result[0].id).toBe(mockWorkOrder.id);
+      expect(generatedOrders).toHaveLength(1);
+      expect(generatedOrders[0].type).toBe('preventive');
+      expect(generatedOrders[0].equipmentId).toBe(mockEquipmentId);
+      expect(storage.createWorkOrder).toHaveBeenCalledTimes(1);
     });
 
     it('should not generate duplicate PM work orders', async () => {
@@ -237,6 +228,7 @@ describe('PMEngine', () => {
         id: mockEquipmentId,
         warehouseId: mockWarehouseId,
         assetTag: 'TEST-001',
+        foNumber: 'FO-001',
         model: 'Test Model',
         manufacturer: 'Test Manufacturer',
         serialNumber: 'SN-001',
@@ -244,10 +236,8 @@ describe('PMEngine', () => {
         area: 'Test Area',
         status: 'active',
         criticality: 'medium',
-        installDate: new Date(),
+        installationDate: new Date(),
         createdAt: new Date(),
-        warrantyExpiry: null,
-        specifications: null,
       };
 
       const mockTemplate: PmTemplate = {
@@ -257,12 +247,10 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'daily',
-        customFields: null,
-        active: true,
+        estimatedDuration: 60,
         createdAt: new Date(),
       };
 
-      // Mock existing work order for today
       const existingWorkOrder: WorkOrder = {
         id: 'existing-wo-id',
         foNumber: 'WO-PM-001',
@@ -274,38 +262,38 @@ describe('PMEngine', () => {
         status: 'new',
         priority: 'medium',
         requestedBy: 'system',
-        assignedTo: null,
+        assignedTo: [],
         equipmentId: mockEquipmentId,
         createdAt: new Date(),
         escalated: false,
         followUp: false,
         escalationLevel: 0,
-        updatedAt: new Date(),
-        dueDate: null,
-        verifiedBy: null,
-        estimatedHours: null,
-        actualHours: null,
-        notes: null,
-        completedAt: null,
+        lastUpdated: new Date(),
       };
 
       vi.mocked(storage.getPmTemplates).mockResolvedValue([mockTemplate]);
       vi.mocked(storage.getEquipment).mockResolvedValue([mockEquipment]);
       vi.mocked(storage.getWorkOrders).mockResolvedValue([existingWorkOrder]);
 
-      const result = await pmEngine.generatePMWorkOrders(mockWarehouseId);
+      const generatedOrders = await pmEngine.generatePMWorkOrders(mockWarehouseId);
 
-      expect(result).toHaveLength(0);
+      expect(generatedOrders).toHaveLength(0);
       expect(storage.createWorkOrder).not.toHaveBeenCalled();
     });
   });
 
   describe('PM Automation', () => {
     it('should run PM automation and return results', async () => {
+      vi.mocked(storage.getPmTemplates).mockResolvedValue([]);
+      vi.mocked(storage.getEquipment).mockResolvedValue([]);
+      vi.mocked(storage.getWorkOrders).mockResolvedValue([]);
+
       const result = await pmEngine.runPMAutomation(mockWarehouseId);
 
-      expect(result.generated).toBeGreaterThanOrEqual(0);
-      expect(result.errors).toBeInstanceOf(Array);
+      expect(result).toHaveProperty('generated');
+      expect(result).toHaveProperty('errors');
+      expect(result.generated).toBe(0);
+      expect(result.errors).toHaveLength(0);
     });
 
     it('should handle errors gracefully', async () => {
@@ -313,30 +301,59 @@ describe('PMEngine', () => {
 
       const result = await pmEngine.runPMAutomation(mockWarehouseId);
 
-      expect(result.errors.length).toBeGreaterThan(0);
       expect(result.generated).toBe(0);
+      expect(result.errors).toHaveLength(1);
+      expect(result.errors[0]).toBe('Database error');
     });
   });
 
   describe('Notification Creation', () => {
     it('should create notifications for supervisors when PM is due', async () => {
-      const mockEquipment: Equipment = {
-        id: mockEquipmentId,
+      const mockSupervisor = {
+        id: 'supervisor-1',
         warehouseId: mockWarehouseId,
-        assetTag: 'TEST-001',
-        model: 'Test Model',
-        manufacturer: 'Test Manufacturer',
-        serialNumber: 'SN-001',
-        description: 'Test Equipment',
-        area: 'Test Area',
-        status: 'active',
-        criticality: 'high',
-        installDate: new Date(),
+        role: 'supervisor',
+        firstName: 'John',
+        lastName: 'Supervisor',
+        email: 'supervisor@example.com',
         createdAt: new Date(),
-        warrantyExpiry: null,
-        specifications: null,
       };
 
+      const mockWorkOrder: WorkOrder = {
+        id: 'wo-1',
+        foNumber: 'WO-PM-001',
+        warehouseId: mockWarehouseId,
+        type: 'preventive',
+        description: 'Test PM',
+        area: 'Test Area',
+        assetModel: 'Test Model',
+        status: 'new',
+        priority: 'medium',
+        requestedBy: 'system',
+        assignedTo: [],
+        equipmentId: mockEquipmentId,
+        createdAt: new Date(),
+        escalated: false,
+        followUp: false,
+        escalationLevel: 0,
+        lastUpdated: new Date(),
+      };
+
+      vi.mocked(storage.getProfiles).mockResolvedValue([mockSupervisor]);
+      vi.mocked(storage.createNotification).mockResolvedValue({
+        id: 'notification-1',
+        userId: mockSupervisor.id,
+        type: 'pm_due',
+        title: 'Preventive Maintenance Due',
+        message: `PM work order ${mockWorkOrder.foNumber} has been created for ${mockWorkOrder.assetModel}`,
+        read: false,
+        workOrderId: mockWorkOrder.id,
+        equipmentId: mockWorkOrder.equipmentId,
+        partId: null,
+        createdAt: new Date(),
+      });
+
+      // Call the private method indirectly through PM work order generation
       const mockTemplate: PmTemplate = {
         id: mockTemplateId,
         warehouseId: mockWarehouseId,
@@ -344,35 +361,53 @@ describe('PMEngine', () => {
         component: 'Test Component',
         action: 'Test Action',
         frequency: 'daily',
-        customFields: null,
-        active: true,
+        estimatedDuration: 60,
         createdAt: new Date(),
       };
 
-      const mockProfiles = [
-        { id: 'supervisor-1', role: 'supervisor', warehouseId: mockWarehouseId },
-        { id: 'technician-1', role: 'technician', warehouseId: mockWarehouseId },
-      ];
+      const mockEquipment: Equipment = {
+        id: mockEquipmentId,
+        warehouseId: mockWarehouseId,
+        assetTag: 'TEST-001',
+        foNumber: 'FO-001',
+        model: 'Test Model',
+        manufacturer: 'Test Manufacturer',
+        serialNumber: 'SN-001',
+        description: 'Test Equipment',
+        area: 'Test Area',
+        status: 'active',
+        criticality: 'medium',
+        installationDate: new Date(),
+        createdAt: new Date(),
+      };
 
       vi.mocked(storage.getPmTemplates).mockResolvedValue([mockTemplate]);
       vi.mocked(storage.getEquipment).mockResolvedValue([mockEquipment]);
       vi.mocked(storage.getWorkOrders).mockResolvedValue([]);
-      vi.mocked(storage.getProfiles).mockResolvedValue(mockProfiles);
-      vi.mocked(storage.createNotification).mockResolvedValue({
-        id: 'notification-1',
-        userId: 'supervisor-1',
-        type: 'pm_due',
-        title: 'PM Due',
-        message: 'PM due for equipment',
-        read: false,
-        data: {},
+      vi.mocked(storage.createWorkOrder).mockResolvedValue(mockWorkOrder);
+      vi.mocked(storage.createWorkOrderChecklistItem).mockResolvedValue({
+        id: 'checklist-1',
+        workOrderId: mockWorkOrder.id,
+        component: mockTemplate.component,
+        action: mockTemplate.action,
+        status: 'pending',
+        notes: null,
+        completedAt: null,
+        completedBy: null,
+        customFieldData: null,
         createdAt: new Date(),
       });
 
       await pmEngine.generatePMWorkOrders(mockWarehouseId);
 
-      // Should call createNotification for supervisors
-      expect(storage.createNotification).toHaveBeenCalled();
+      expect(storage.createNotification).toHaveBeenCalledWith({
+        userId: mockSupervisor.id,
+        type: 'pm_due',
+        title: 'Preventive Maintenance Due',
+        message: `PM work order ${mockWorkOrder.foNumber} has been created for ${mockWorkOrder.assetModel}`,
+        workOrderId: mockWorkOrder.id,
+        equipmentId: mockWorkOrder.equipmentId,
+      });
     });
   });
 });

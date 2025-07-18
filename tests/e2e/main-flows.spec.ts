@@ -1,19 +1,30 @@
 import { test, expect } from '@playwright/test'
+import { loginAs, logout } from '../helpers/auth'
+import { testData, testCredentials } from '../helpers/testData'
 
-// Test data
-const testUser = {
-  email: 'supervisor@maintainpro.com',
-  password: 'demo123',
-  name: 'John Smith',
-  role: 'supervisor',
-}
+// Test data - use local definitions to avoid conflicts
+const testUsers = {
+  technician: {
+    email: 'test@example.com',
+    password: 'password',
+    name: 'Test User',
+    role: 'technician',
+  },
+  supervisor: {
+    email: 'supervisor@maintainpro.com',
+    password: 'password',
+    name: 'John Smith',
+    role: 'supervisor',
+  },
+  manager: {
+    email: 'manager@example.com',
+    password: 'password',
+    name: 'Mike Johnson',
+    role: 'manager',
+  }
+};
 
-const testWorkOrder = {
-  foNumber: 'WO-E2E-001',
-  description: 'End-to-end test work order',
-  priority: 'medium',
-  equipmentId: '1',
-}
+const testWorkOrder = testData.workOrder;
 
 test.describe('Authentication Flow', () => {
   test('user can login and logout', async ({ page }) => {
@@ -21,15 +32,15 @@ test.describe('Authentication Flow', () => {
     await page.goto('/login')
     
     // Fill in login form
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.supervisor.email)
+    await page.fill('[data-testid="password-input"]', testUsers.supervisor.password)
     
     // Submit login
     await page.click('[data-testid="login-button"]')
     
     // Verify successful login
     await expect(page).toHaveURL('/dashboard')
-    await expect(page.locator('[data-testid="user-name"]')).toContainText(testUser.name)
+    await expect(page.locator('[data-testid="user-name"]')).toContainText(testUsers.supervisor.name)
     
     // Logout
     await page.click('[data-testid="user-menu-button"]')
@@ -42,13 +53,14 @@ test.describe('Authentication Flow', () => {
   test('shows error for invalid credentials', async ({ page }) => {
     await page.goto('/login')
     
-    await page.fill('[data-testid="email-input"]', 'invalid@example.com')
-    await page.fill('[data-testid="password-input"]', 'wrongpassword')
+    await page.fill('[data-testid="email-input"]', testCredentials.invalid.email)
+    await page.fill('[data-testid="password-input"]', testCredentials.invalid.password)
     
     await page.click('[data-testid="login-button"]')
     
-    await expect(page.locator('[data-testid="error-message"]')).toBeVisible()
-    await expect(page.locator('[data-testid="error-message"]')).toContainText('Invalid credentials')
+    // Check for toast notification with error message
+    await expect(page.locator('.destructive')).toBeVisible()
+    await expect(page.locator('.destructive')).toContainText('Invalid credentials')
   })
 })
 
@@ -56,8 +68,8 @@ test.describe('Work Order Management', () => {
   test.beforeEach(async ({ page }) => {
     // Login before each test
     await page.goto('/login')
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.technician.email)
+    await page.fill('[data-testid="password-input"]', testUsers.technician.password)
     await page.click('[data-testid="login-button"]')
     await expect(page).toHaveURL('/dashboard')
   })
@@ -248,8 +260,8 @@ test.describe('Mobile Responsiveness', () => {
   
   test('mobile navigation works correctly', async ({ page }) => {
     await page.goto('/login')
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.technician.email)
+    await page.fill('[data-testid="password-input"]', testUsers.technician.password)
     await page.click('[data-testid="login-button"]')
     
     // Open mobile menu
@@ -267,8 +279,8 @@ test.describe('Mobile Responsiveness', () => {
 
   test('work order cards are touch-friendly', async ({ page }) => {
     await page.goto('/login')
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.technician.email)
+    await page.fill('[data-testid="password-input"]', testUsers.technician.password)
     await page.click('[data-testid="login-button"]')
     
     await page.goto('/work-orders')
@@ -285,8 +297,8 @@ test.describe('Mobile Responsiveness', () => {
 test.describe('Offline Functionality', () => {
   test('shows offline indicator when network is unavailable', async ({ page }) => {
     await page.goto('/login')
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.technician.email)
+    await page.fill('[data-testid="password-input"]', testUsers.technician.password)
     await page.click('[data-testid="login-button"]')
     
     // Simulate offline mode
@@ -299,8 +311,8 @@ test.describe('Offline Functionality', () => {
 
   test('can complete work orders offline', async ({ page }) => {
     await page.goto('/login')
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.technician.email)
+    await page.fill('[data-testid="password-input"]', testUsers.technician.password)
     await page.click('[data-testid="login-button"]')
     
     await page.goto('/work-orders')
@@ -356,8 +368,8 @@ test.describe('Accessibility', () => {
 test.describe('Performance', () => {
   test('dashboard loads within acceptable time', async ({ page }) => {
     await page.goto('/login')
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.technician.email)
+    await page.fill('[data-testid="password-input"]', testUsers.technician.password)
     
     const startTime = Date.now()
     await page.click('[data-testid="login-button"]')
@@ -370,8 +382,8 @@ test.describe('Performance', () => {
 
   test('work order list handles large datasets', async ({ page }) => {
     await page.goto('/login')
-    await page.fill('[data-testid="email-input"]', testUser.email)
-    await page.fill('[data-testid="password-input"]', testUser.password)
+    await page.fill('[data-testid="email-input"]', testUsers.technician.email)
+    await page.fill('[data-testid="password-input"]', testUsers.technician.password)
     await page.click('[data-testid="login-button"]')
     
     await page.goto('/work-orders')

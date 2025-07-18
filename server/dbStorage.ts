@@ -195,6 +195,87 @@ export class DatabaseStorage implements IStorage {
 
     await db.insert(notifications).values(notificationsList).returning();
 
+    // Create sample work orders
+    const workOrdersList = [
+      {
+        id: this.generateId(),
+        foNumber: 'WO-001',
+        type: 'preventive' as const,
+        description: 'Monthly maintenance check on centrifugal water pump',
+        area: 'Production Floor A',
+        assetModel: 'WP-500',
+        status: 'new' as const,
+        priority: 'medium' as const,
+        equipmentId: insertedEquipment[0].id,
+        assignedTo: insertedUsers[1].id, // technician
+        requestedBy: insertedUsers[0].id, // supervisor
+        dueDate: new Date('2025-02-15'),
+        completedAt: null,
+        verifiedBy: null,
+        estimatedHours: '4.00',
+        actualHours: null,
+        notes: 'Check seals and lubrication',
+        followUp: false,
+        escalated: false,
+        escalationLevel: 0,
+        warehouseId: warehouse.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: this.generateId(),
+        foNumber: 'WO-002',
+        type: 'preventive' as const,
+        description: 'Weekly inspection of conveyor belt system',
+        area: 'Packaging Line 1',
+        assetModel: 'CB-1200',
+        status: 'in_progress' as const,
+        priority: 'high' as const,
+        equipmentId: insertedEquipment[1].id,
+        assignedTo: insertedUsers[1].id, // technician
+        requestedBy: insertedUsers[0].id, // supervisor
+        dueDate: new Date('2025-01-20'),
+        completedAt: null,
+        verifiedBy: null,
+        estimatedHours: '2.00',
+        actualHours: '1.50',
+        notes: 'Check belt tension and alignment',
+        followUp: false,
+        escalated: false,
+        escalationLevel: 0,
+        warehouseId: warehouse.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: this.generateId(),
+        foNumber: 'WO-003',
+        type: 'emergency' as const,
+        description: 'Urgent repair needed on water pump seal',
+        area: 'Production Floor A',
+        assetModel: 'WP-500',
+        status: 'assigned' as const,
+        priority: 'critical' as const,
+        equipmentId: insertedEquipment[0].id,
+        assignedTo: insertedUsers[1].id, // technician
+        requestedBy: insertedUsers[2].id, // manager
+        dueDate: new Date('2025-01-18'),
+        completedAt: null,
+        verifiedBy: null,
+        estimatedHours: '6.00',
+        actualHours: null,
+        notes: 'Pump seal is leaking, affecting production',
+        followUp: true,
+        escalated: false,
+        escalationLevel: 0,
+        warehouseId: warehouse.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    await db.insert(workOrders).values(workOrdersList as any).returning();
+
     console.log('Database initialized with sample data');
   }
 
@@ -315,10 +396,6 @@ export class DatabaseStorage implements IStorage {
       .where(eq(workOrders.id, id))
       .returning();
     return updated;
-  }
-
-  async deleteWorkOrder(id: string): Promise<void> {
-    await db.delete(workOrders).where(eq(workOrders.id, id));
   }
 
   async getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]> {

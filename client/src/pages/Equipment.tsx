@@ -8,6 +8,7 @@ import { Search, QrCode, Plus, Settings } from 'lucide-react';
 import { useEquipment } from '../hooks/useEquipment';
 import { Equipment } from '../types';
 import EquipmentDetailModal from '../components/equipment/EquipmentDetailModal';
+import EquipmentFormModal from '../components/equipment/EquipmentFormModal';
 import QRScanner from '../components/qr/QRScanner';
 
 export default function EquipmentPage() {
@@ -16,6 +17,7 @@ export default function EquipmentPage() {
   const [criticalityFilter, setCriticalityFilter] = useState<string>('all');
   const [selectedEquipment, setSelectedEquipment] = useState<string | null>(null);
   const [showQRScanner, setShowQRScanner] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   const { data: equipment, isLoading } = useEquipment();
 
@@ -86,11 +88,15 @@ export default function EquipmentPage() {
             <Button 
               variant="outline" 
               onClick={() => setShowQRScanner(true)}
+              data-testid="qr-scan-button"
             >
               <QrCode className="w-4 h-4 mr-2" />
               Scan QR
             </Button>
-            <Button>
+            <Button 
+              data-testid="create-equipment-button"
+              onClick={() => setShowCreateModal(true)}
+            >
               <Plus className="w-4 h-4 mr-2" />
               Add Equipment
             </Button>
@@ -241,6 +247,14 @@ export default function EquipmentPage() {
           isOpen={!!selectedEquipment}
           onClose={() => setSelectedEquipment(null)}
           equipmentId={selectedEquipment}
+        />
+      )}
+
+      {/* Equipment Form Modal */}
+      {showCreateModal && (
+        <EquipmentFormModal
+          isOpen={showCreateModal}
+          onClose={() => setShowCreateModal(false)}
         />
       )}
 

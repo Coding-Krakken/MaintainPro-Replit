@@ -6,9 +6,9 @@
 - img
 - heading "MaintAInPro" [level=1]
 - paragraph: Enterprise CMMS
-- text: JS
-- paragraph: John Smith
-- paragraph: supervisor
+- text: TU
+- paragraph: Test User
+- paragraph: technician
 - navigation:
   - link "Dashboard":
     - /url: /dashboard
@@ -45,11 +45,10 @@
 - banner:
   - textbox "Search work orders, equipment..."
   - img
-  - button "1":
+  - button:
     - img
-    - text: "1"
-  - button "JS John Smith":
-    - text: JS John Smith
+  - button "TU Test User":
+    - text: TU Test User
     - img
 - main:
   - heading "Work Orders" [level=1]

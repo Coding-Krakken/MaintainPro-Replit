@@ -22,12 +22,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const checkAuth = async () => {
     try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
       // Add a timeout to prevent hanging
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
 
       const response = await fetch('/api/profiles/me', {
         headers: {
+          'Authorization': `Bearer ${token}`,
           'x-user-id': localStorage.getItem('userId') || 'default-supervisor-id',
           'x-warehouse-id': localStorage.getItem('warehouseId') || 'default-warehouse-id',
         },
@@ -49,21 +56,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         });
       } else {
         console.warn('Auth check failed with status:', response.status);
+        // Clear invalid token
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('userId');
+        localStorage.removeItem('warehouseId');
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      // For now, set a default user for demo purposes
-      if (localStorage.getItem('userId')) {
-        setUser({
-          id: localStorage.getItem('userId') || 'demo-user',
-          email: 'demo@example.com',
-          firstName: 'Demo',
-          lastName: 'User',
-          role: 'supervisor',
-          warehouseId: localStorage.getItem('warehouseId') || 'demo-warehouse',
-          active: true,
-        });
-      }
+      // Clear potentially invalid token
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('warehouseId');
     } finally {
       setLoading(false);
     }
@@ -72,33 +75,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // Demo credentials validation
-      const validCredentials = [
-        { email: 'supervisor@maintainpro.com', password: 'demo123', role: 'supervisor' },
-        { email: 'technician@maintainpro.com', password: 'demo123', role: 'technician' },
-        { email: 'manager@maintainpro.com', password: 'demo123', role: 'manager' },
-      ];
-      
-      const validUser = validCredentials.find(cred => cred.email === email && cred.password === password);
-      
-      if (!validUser) {
+      // Use the server API for authentication
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
         throw new Error('Invalid credentials');
       }
+
+      const data = await response.json();
+      const { user, token } = data;
+
+      // Store token and user info
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('userId', user.id);
+      localStorage.setItem('warehouseId', user.warehouseId);
       
-      // For demo purposes, we'll simulate login
-      const mockUser: AuthUser = {
-        id: `${validUser.role}-id`,
-        email,
-        firstName: 'John',
-        lastName: 'Smith',
-        role: validUser.role as any,
-        warehouseId: 'warehouse-1',
+      // Create full user object with proper structure
+      const fullUser = {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        role: user.role,
+        warehouseId: user.warehouseId,
         active: true,
       };
       
-      localStorage.setItem('userId', mockUser.id);
-      localStorage.setItem('warehouseId', mockUser.warehouseId);
-      setUser(mockUser);
+      setUser(fullUser);
     } catch (error) {
       throw new Error('Login failed');
     } finally {
@@ -107,6 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
+    localStorage.removeItem('authToken');
     localStorage.removeItem('userId');
     localStorage.removeItem('warehouseId');
     setUser(null);

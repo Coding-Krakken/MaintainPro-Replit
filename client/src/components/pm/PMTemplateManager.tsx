@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Edit, Trash2, Save, X, Search, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Save, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -25,8 +25,6 @@ interface PMTemplateFormData {
 export default function PMTemplateManager() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [editingTemplate, setEditingTemplate] = useState<PmTemplate | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [frequencyFilter, setFrequencyFilter] = useState('all');
   const [formData, setFormData] = useState<PMTemplateFormData>({
     model: '',
     component: '',
@@ -37,8 +35,8 @@ export default function PMTemplateManager() {
     customFields: {}
   });
   
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const { data: templates = [], isLoading } = useQuery<PmTemplate[]>({
     queryKey: ['/api/pm-templates'],
@@ -68,12 +66,19 @@ export default function PMTemplateManager() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/pm-templates'] });
-      toast({ title: 'Success', description: 'PM template created successfully' });
+      toast({
+        title: 'Success',
+        description: 'PM template created successfully',
+      });
       setIsCreateDialogOpen(false);
       resetForm();
     },
     onError: (error) => {
-      toast({ title: 'Error', description: `Failed to create PM template: ${error.message}`, variant: 'destructive' });
+      toast({
+        title: 'Error',
+        description: `Failed to create PM template: ${error.message}`,
+        variant: 'destructive',
+      });
     },
   });
 
@@ -92,12 +97,19 @@ export default function PMTemplateManager() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/pm-templates'] });
-      toast({ title: 'Success', description: 'PM template updated successfully' });
+      toast({
+        title: 'Success',
+        description: 'PM template updated successfully',
+      });
       setEditingTemplate(null);
       resetForm();
     },
     onError: (error) => {
-      toast({ title: 'Error', description: `Failed to update PM template: ${error.message}`, variant: 'destructive' });
+      toast({
+        title: 'Error',
+        description: `Failed to update PM template: ${error.message}`,
+        variant: 'destructive',
+      });
     },
   });
 
@@ -113,10 +125,17 @@ export default function PMTemplateManager() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['/api/pm-templates'] });
-      toast({ title: 'Success', description: 'PM template deleted successfully' });
+      toast({
+        title: 'Success',
+        description: 'PM template deleted successfully',
+      });
     },
     onError: (error) => {
-      toast({ title: 'Error', description: `Failed to delete PM template: ${error.message}`, variant: 'destructive' });
+      toast({
+        title: 'Error',
+        description: `Failed to delete PM template: ${error.message}`,
+        variant: 'destructive',
+      });
     },
   });
 
@@ -148,8 +167,8 @@ export default function PMTemplateManager() {
       component: template.component,
       action: template.action,
       frequency: template.frequency,
-      estimatedDuration: 60, // Default value since it's not in the schema
-      description: '', // Default value since it's not in the schema
+      estimatedDuration: template.estimatedDuration || 60,
+      description: template.description || '',
       customFields: template.customFields || {}
     });
     setIsCreateDialogOpen(true);
@@ -171,20 +190,6 @@ export default function PMTemplateManager() {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
-
-  // Filter and search templates
-  const filteredTemplates = useMemo(() => {
-    return templates.filter(template => {
-      const matchesSearch = searchTerm === '' || 
-        template.model.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        template.component.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        template.action.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesFrequency = frequencyFilter === 'all' || template.frequency === frequencyFilter;
-      
-      return matchesSearch && matchesFrequency;
-    });
-  }, [templates, searchTerm, frequencyFilter]);
 
   if (isLoading) {
     return (
@@ -309,58 +314,19 @@ export default function PMTemplateManager() {
         </Dialog>
       </div>
 
-      {/* Search and Filter Bar */}
-      <div className="flex space-x-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Search templates by model, component, or action..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-        <div className="flex items-center space-x-2">
-          <Filter className="w-4 h-4 text-gray-500" />
-          <Select value={frequencyFilter} onValueChange={setFrequencyFilter}>
-            <SelectTrigger className="w-40">
-              <SelectValue placeholder="Filter by frequency" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Frequencies</SelectItem>
-              <SelectItem value="daily">Daily</SelectItem>
-              <SelectItem value="weekly">Weekly</SelectItem>
-              <SelectItem value="monthly">Monthly</SelectItem>
-              <SelectItem value="quarterly">Quarterly</SelectItem>
-              <SelectItem value="annually">Annually</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
       <div className="grid gap-4">
-        {filteredTemplates.length === 0 ? (
+        {templates.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <div className="text-gray-500 text-center">
-                {searchTerm || frequencyFilter !== 'all' ? (
-                  <>
-                    <Search className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                    <h3 className="text-lg font-medium mb-2">No templates found</h3>
-                    <p className="text-sm">Try adjusting your search or filter criteria.</p>
-                  </>
-                ) : (
-                  <>
-                    <Plus className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                    <h3 className="text-lg font-medium mb-2">No PM Templates</h3>
-                    <p className="text-sm">Create your first PM template to get started with preventive maintenance automation.</p>
-                  </>
-                )}
+                <Plus className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+                <h3 className="text-lg font-medium mb-2">No PM Templates</h3>
+                <p className="text-sm">Create your first PM template to get started with preventive maintenance automation.</p>
               </div>
             </CardContent>
           </Card>
         ) : (
-          filteredTemplates.map((template) => (
+          templates.map((template) => (
             <Card key={template.id}>
               <CardHeader>
                 <div className="flex justify-between items-start">
@@ -395,24 +361,16 @@ export default function PMTemplateManager() {
                     <Badge className={getFrequencyColor(template.frequency)}>
                       {template.frequency}
                     </Badge>
+                    <span className="text-sm text-gray-600">
+                      {template.estimatedDuration || 60} minutes
+                    </span>
                   </div>
                   <span className="text-xs text-gray-500">
                     Created {new Date(template.createdAt).toLocaleDateString()}
                   </span>
                 </div>
-                
-                {template.customFields && Object.keys(template.customFields).length > 0 && (
-                  <div className="mt-3">
-                    <span className="text-sm font-medium text-gray-700">Custom Fields:</span>
-                    <div className="mt-1 space-y-1">
-                      {Object.entries(template.customFields as Record<string, any>).map(([key, value]) => (
-                        <div key={key} className="flex justify-between text-sm">
-                          <span className="text-gray-600">{key}:</span>
-                          <span className="text-gray-900">{String(value)}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                {template.description && (
+                  <p className="text-sm text-gray-600 mt-2">{template.description}</p>
                 )}
               </CardContent>
             </Card>

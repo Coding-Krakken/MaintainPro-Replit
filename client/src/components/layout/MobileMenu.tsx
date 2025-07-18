@@ -115,6 +115,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
                       ? 'bg-primary-50 text-primary-700'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
+                  data-testid={`mobile-nav-${item.name.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   <item.icon className="w-5 h-5" />
                   <span>{item.name}</span>
