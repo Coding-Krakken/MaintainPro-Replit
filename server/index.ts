@@ -125,9 +125,11 @@ export { app };
 if (process.env.NODE_ENV !== 'test') {
   (async () => {
     const server = await initializeApp();
-    
+    // Log all environment variables for debugging
+    console.log('ENVIRONMENT VARIABLES:', JSON.stringify(process.env, null, 2));
     // Serve the app on configured port (default 5000)
     const port = process.env.PORT || 5000;
+    console.log('About to start server on port', port);
     const httpServer = server.listen({
       port: Number(port),
       host: process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost",
