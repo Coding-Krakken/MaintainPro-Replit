@@ -10,6 +10,7 @@ import {
   insertVendorSchema
 } from "@shared/schema";
 import { z } from "zod";
+import { SecurityService } from "./services/auth/security.service";
 
 // Import PM services with error handling
 let pmEngine: any = null;
@@ -64,27 +65,83 @@ export async function registerRoutes(app: Express): Promise<Server> {
   console.log('Health check endpoint registered');
 
   // Authentication middleware
-  const authenticateRequest = (req: any, res: any, next: any) => {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    
-    if (!token) {
-      return res.status(401).json({ message: "Authentication required" });
+  const authenticateRequest = async (req: any, res: any, next: any) => {
+    try {
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      
+      if (!token) {
+        return res.status(401).json({ message: "Authentication required" });
+      }
+      
+      // In test environment, accept mock-token
+      if (process.env.NODE_ENV === 'test' && token === 'mock-token') {
+        req.user = { id: '00000000-0000-0000-0000-000000000001', warehouseId: '00000000-0000-0000-0000-000000000001' };
+        return next();
+      }
+
+      // Use advanced JWT validation
+      const { AuthService } = await import('./services/auth');
+      
+      const tokenValidation = await new AuthService().validateToken(token);
+      if (!tokenValidation.valid) {
+        return res.status(401).json({ message: "Invalid or expired token" });
+      }
+
+      // Check if session is still valid
+      const sessionValid = await new AuthService().validateSession(tokenValidation.payload.sessionId);
+      if (!sessionValid) {
+        return res.status(401).json({ message: "Session expired" });
+      }
+
+      req.user = {
+        id: tokenValidation.payload.userId,
+        warehouseId: tokenValidation.payload.warehouseId,
+        role: tokenValidation.payload.role,
+        sessionId: tokenValidation.payload.sessionId
+      };
+      
+      next();
+    } catch (error) {
+      console.error('Authentication error:', error);
+      return res.status(401).json({ message: "Authentication failed" });
     }
-    
-    // In test environment, accept mock-token
-    if (process.env.NODE_ENV === 'test' && token === 'mock-token') {
-      req.user = { id: '00000000-0000-0000-0000-000000000001', warehouseId: '00000000-0000-0000-0000-000000000001' };
-      return next();
-    }
-    
-    // In real implementation, this would verify JWT token
-    if (token) {
-      req.user = { id: '00000000-0000-0000-0000-000000000001', warehouseId: '00000000-0000-0000-0000-000000000001' };
-      return next();
-    }
-    
-    return res.status(401).json({ message: "Invalid token" });
   };
+
+  // RBAC middleware for role-based access control
+  const requireRole = (...allowedRoles: string[]) => {
+    return async (req: any, res: any, next: any) => {
+      try {
+        const { AuthService } = await import('./services/auth');
+        
+        const sessionId = req.user?.sessionId;
+        const resource = req.route?.path || req.url;
+        const action = req.method.toLowerCase();
+        
+        const result = await AuthService.validateAccess(sessionId, resource, action);
+        
+        if (!result.allowed) {
+          return res.status(403).json({ message: "Insufficient permissions" });
+        }
+        
+        next();
+      } catch (error) {
+        console.error('Authorization error:', error);
+        return res.status(403).json({ message: "Access denied" });
+      }
+    };
+  };
+
+  // Rate limiting middleware
+  const createRateLimiter = (windowMs: number, max: number) => {
+    return SecurityService.createRateLimiter({
+      windowMs,
+      maxRequests: max
+    });
+  };
+
+  // Apply rate limiting to auth routes
+  const authRateLimit = createRateLimiter(15 * 60 * 1000, 5); // 5 attempts per 15 minutes
+  const generalRateLimit = createRateLimiter(15 * 60 * 1000, 100); // 100 requests per 15 minutes
 
   const getCurrentUser = (req: any) => {
     return req.user?.id || req.headers['x-user-id'] || '00000000-0000-0000-0000-000000000001';
@@ -95,81 +152,265 @@ export async function registerRoutes(app: Express): Promise<Server> {
   };
 
   // Authentication routes
-  app.post("/api/auth/login", async (req, res) => {
+  app.post("/api/auth/login", authRateLimit, async (req, res) => {
     try {
-      const { email, password } = req.body;
-      
-      // Validate email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return res.status(400).json({ message: "Invalid email format" });
-      }
-      
-      // Test users for different roles
-      const testUsers = {
-        'test@example.com': {
-          id: 'test-user-id',
-          email: 'test@example.com',
-          firstName: 'Test',
-          lastName: 'User',
-          role: 'technician',
-          warehouseId: '1'
-        },
-        'supervisor@maintainpro.com': {
-          id: 'supervisor-user-id',
-          email: 'supervisor@maintainpro.com',
-          firstName: 'John',
-          lastName: 'Smith',
-          role: 'supervisor',
-          warehouseId: '1'
-        },
-        'supervisor@example.com': {
-          id: 'supervisor-user-id-2',
-          email: 'supervisor@example.com',
-          firstName: 'Jane',
-          lastName: 'Smith',
-          role: 'supervisor',
-          warehouseId: '1'
-        },
-        'manager@example.com': {
-          id: 'manager-user-id',
-          email: 'manager@example.com',
-          firstName: 'Mike',
-          lastName: 'Johnson',
-          role: 'manager',
-          warehouseId: '1'
-        },
-        'technician@example.com': {
-          id: 'technician-user-id',
-          email: 'technician@example.com',
-          firstName: 'Sarah',
-          lastName: 'Wilson',
-          role: 'technician',
-          warehouseId: '1'
-        }
+      const { AuthService } = await import('./services/auth');
+
+      const deviceInfo = {
+        userAgent: req.headers['user-agent'] || 'Unknown',
+        ipAddress: req.ip || req.connection.remoteAddress || 'Unknown'
       };
 
-      // Check if user exists and password is correct
-      const user = testUsers[email as keyof typeof testUsers];
-      if (user && password === 'password') {
-        res.json({
-          user,
-          token: 'mock-jwt-token'
+      const loginResult = await AuthService.login({
+        email: req.body.email,
+        password: req.body.password,
+        mfaToken: req.body.mfaToken,
+        rememberMe: req.body.rememberMe || false,
+        deviceFingerprint: req.body.deviceFingerprint
+      }, deviceInfo);
+
+      if (!loginResult.success) {
+        return res.status(401).json({ 
+          message: loginResult.error || "Invalid credentials",
+          requiresMFA: loginResult.mfaRequired,
+          isLocked: loginResult.accountLocked,
+          lockoutExpires: loginResult.lockoutTimeRemaining
         });
-      } else {
-        res.status(401).json({ message: "Invalid credentials" });
       }
+
+      res.json({
+        user: loginResult.user,
+        token: loginResult.tokens?.accessToken,
+        refreshToken: loginResult.tokens?.refreshToken,
+        sessionId: loginResult.sessionId
+      });
     } catch (error) {
+      console.error('Login error:', error);
       res.status(500).json({ message: "Login failed" });
     }
   });
 
   app.post("/api/auth/logout", authenticateRequest, async (req, res) => {
     try {
-      // In real implementation, this would invalidate the token
+      const { AuthService } = await import('./services/auth');
+      
+      const sessionId = (req as any).user?.sessionId;
+      if (sessionId) {
+        const context = {
+          ipAddress: req.ip || req.connection.remoteAddress || 'Unknown',
+          userAgent: req.headers['user-agent'] || 'Unknown'
+        };
+        await AuthService.logout(sessionId, context);
+      }
+      
       res.json({ message: "Logout successful" });
     } catch (error) {
+      console.error('Logout error:', error);
       res.status(500).json({ message: "Logout failed" });
+    }
+  });
+
+  // Token refresh route
+  app.post("/api/auth/refresh", async (req, res) => {
+    try {
+      const { AuthService } = await import('./services/auth');
+      
+      const { refreshToken } = req.body;
+      if (!refreshToken) {
+        return res.status(400).json({ message: "Refresh token required" });
+      }
+
+      const context = {
+        ipAddress: req.ip || req.connection.remoteAddress || 'Unknown',
+        userAgent: req.headers['user-agent'] || 'Unknown'
+      };
+
+      const result = await AuthService.refreshToken(refreshToken, context);
+      if (!result.success) {
+        return res.status(401).json({ message: result.error || "Invalid refresh token" });
+      }
+
+      res.json({
+        accessToken: result.tokens?.accessToken,
+        refreshToken: result.tokens?.refreshToken
+      });
+    } catch (error) {
+      console.error('Token refresh error:', error);
+      res.status(500).json({ message: "Token refresh failed" });
+    }
+  });
+
+  // MFA setup route
+  app.post("/api/auth/mfa/setup", authenticateRequest, async (req, res) => {
+    try {
+      const { AuthService } = await import('./services/auth');
+      
+      const userId = getCurrentUser(req);
+      const { type = 'totp', phoneNumber } = req.body;
+      
+      const result = await AuthService.setupMFA(userId, type, phoneNumber);
+      
+      res.json(result);
+    } catch (error) {
+      console.error('MFA setup error:', error);
+      res.status(500).json({ message: "MFA setup failed" });
+    }
+  });
+
+  // MFA enable route
+  app.post("/api/auth/mfa/enable", authenticateRequest, async (req, res) => {
+    try {
+      const { AuthService } = await import('./services/auth');
+      
+      const userId = getCurrentUser(req);
+      const { token } = req.body;
+      
+      const context = {
+        ipAddress: req.ip || req.connection.remoteAddress || 'Unknown',
+        userAgent: req.headers['user-agent'] || 'Unknown'
+      };
+      
+      const result = await AuthService.enableMFA(userId, token, context);
+      if (!result.success) {
+        return res.status(400).json({ message: result.error || "Invalid MFA token" });
+      }
+      
+      res.json({ message: "MFA enabled successfully" });
+    } catch (error) {
+      console.error('MFA enable error:', error);
+      res.status(500).json({ message: "MFA enable failed" });
+    }
+  });
+
+  // User registration route
+  app.post("/api/auth/register", authRateLimit, async (req, res) => {
+    try {
+      const { AuthService } = await import('./services/auth');
+      
+      const context = {
+        ipAddress: req.ip || req.connection.remoteAddress || 'Unknown',
+        userAgent: req.headers['user-agent'] || 'Unknown'
+      };
+      
+      const result = await AuthService.register(req.body, context);
+      if (!result.success) {
+        return res.status(400).json({ message: result.error || "Registration failed" });
+      }
+      
+      res.status(201).json({ 
+        message: "Registration successful",
+        userId: result.userId 
+      });
+    } catch (error) {
+      console.error('Registration error:', error);
+      res.status(500).json({ message: "Registration failed" });
+    }
+  });
+
+  // Password reset request route
+  app.post("/api/auth/password-reset", authRateLimit, async (req, res) => {
+    try {
+      const { AuthService } = await import('./services/auth');
+      
+      const { email } = req.body;
+      if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+      }
+
+      const resetRequest = {
+        email,
+        ipAddress: req.ip || req.connection.remoteAddress || 'Unknown',
+        userAgent: req.headers['user-agent'] || 'Unknown'
+      };
+
+      const result = await AuthService.requestPasswordReset(resetRequest);
+      
+      // Always return success for security (don't reveal if email exists)
+      res.json({ message: "If the email exists, a password reset link has been sent" });
+    } catch (error) {
+      console.error('Password reset request error:', error);
+      res.status(500).json({ message: "Password reset request failed" });
+    }
+  });
+
+  // Password reset confirmation route
+  app.post("/api/auth/password-reset/confirm", async (req, res) => {
+    try {
+      const { AuthService } = await import('./services/auth');
+      
+      const { token, newPassword } = req.body;
+      if (!token || !newPassword) {
+        return res.status(400).json({ message: "Token and new password are required" });
+      }
+
+      const resetConfirm = {
+        token,
+        newPassword,
+        ipAddress: req.ip || req.connection.remoteAddress || 'Unknown',
+        userAgent: req.headers['user-agent'] || 'Unknown'
+      };
+
+      const result = await AuthService.confirmPasswordReset(resetConfirm);
+      if (!result.success) {
+        return res.status(400).json({ message: result.error || "Password reset failed" });
+      }
+      
+      res.json({ message: "Password reset successful" });
+    } catch (error) {
+      console.error('Password reset confirmation error:', error);
+      res.status(500).json({ message: "Password reset confirmation failed" });
+    }
+  });
+
+  // Get user sessions route
+  app.get("/api/auth/sessions", authenticateRequest, async (req, res) => {
+    try {
+      const { SessionService } = await import('./services/auth/session.service');
+      
+      const userId = getCurrentUser(req);
+      const sessions = await SessionService.getUserSessions(userId);
+      
+      res.json(sessions);
+    } catch (error) {
+      console.error('Get sessions error:', error);
+      res.status(500).json({ message: "Failed to get sessions" });
+    }
+  });
+
+  // End specific session route
+  app.delete("/api/auth/sessions/:sessionId", authenticateRequest, async (req, res) => {
+    try {
+      const { SessionService } = await import('./services/auth/session.service');
+      
+      const { sessionId } = req.params;
+      const success = await SessionService.endSession(sessionId);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Session not found" });
+      }
+      
+      res.json({ message: "Session ended successfully" });
+    } catch (error) {
+      console.error('End session error:', error);
+      res.status(500).json({ message: "Failed to end session" });
+    }
+  });
+
+  // End all sessions route
+  app.delete("/api/auth/sessions", authenticateRequest, async (req, res) => {
+    try {
+      const { SessionService } = await import('./services/auth/session.service');
+      
+      const userId = getCurrentUser(req);
+      const endedCount = await SessionService.endAllUserSessions(userId);
+      
+      res.json({ 
+        message: "All sessions ended successfully", 
+        endedSessions: endedCount 
+      });
+    } catch (error) {
+      console.error('End all sessions error:', error);
+      res.status(500).json({ message: "Failed to end sessions" });
     }
   });
 

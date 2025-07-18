@@ -177,7 +177,15 @@ export class MemStorage implements IStorage {
       role: "supervisor",
       warehouseId,
       active: true,
+      emailVerified: true,
+      emailVerificationToken: null,
+      lastLoginAt: null,
+      loginAttempts: 0,
+      lockedUntil: null,
+      phoneNumber: null,
+      preferences: null,
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
     
     const technician: Profile = {
@@ -188,7 +196,15 @@ export class MemStorage implements IStorage {
       role: "technician",
       warehouseId,
       active: true,
+      emailVerified: true,
+      emailVerificationToken: null,
+      lastLoginAt: null,
+      loginAttempts: 0,
+      lockedUntil: null,
+      phoneNumber: null,
+      preferences: null,
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
     
     const manager: Profile = {
@@ -199,7 +215,15 @@ export class MemStorage implements IStorage {
       role: "manager",
       warehouseId,
       active: true,
+      emailVerified: true,
+      emailVerificationToken: null,
+      lastLoginAt: null,
+      loginAttempts: 0,
+      lockedUntil: null,
+      phoneNumber: null,
+      preferences: null,
       createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     this.profiles.set(supervisorId, supervisor);

@@ -11,6 +11,104 @@ export const profiles = pgTable("profiles", {
   role: text("role").notNull().$type<'technician' | 'supervisor' | 'manager' | 'admin' | 'inventory_clerk' | 'contractor' | 'requester'>(),
   warehouseId: uuid("warehouse_id").references(() => warehouses.id),
   active: boolean("active").default(true),
+  emailVerified: boolean("email_verified").default(false),
+  emailVerificationToken: text("email_verification_token"),
+  lastLoginAt: timestamp("last_login_at"),
+  loginAttempts: integer("login_attempts").default(0),
+  lockedUntil: timestamp("locked_until"),
+  phoneNumber: text("phone_number"),
+  preferences: jsonb("preferences"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// User Authentication Credentials
+export const userCredentials = pgTable("user_credentials", {
+  id: uuid("id").primaryKey(),
+  userId: uuid("user_id").references(() => profiles.id).notNull(),
+  passwordHash: text("password_hash").notNull(),
+  passwordSalt: text("password_salt").notNull(),
+  mustChangePassword: boolean("must_change_password").default(false),
+  passwordExpiresAt: timestamp("password_expires_at"),
+  previousPasswords: jsonb("previous_passwords"), // Store hashes of last 5 passwords
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// User Sessions
+export const userSessions = pgTable("user_sessions", {
+  id: uuid("id").primaryKey(),
+  userId: uuid("user_id").references(() => profiles.id).notNull(),
+  sessionToken: text("session_token").notNull().unique(),
+  refreshToken: text("refresh_token").notNull().unique(),
+  deviceInfo: jsonb("device_info"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  expiresAt: timestamp("expires_at").notNull(),
+  lastAccessedAt: timestamp("last_accessed_at").defaultNow(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Multi-Factor Authentication
+export const userMfa = pgTable("user_mfa", {
+  id: uuid("id").primaryKey(),
+  userId: uuid("user_id").references(() => profiles.id).notNull(),
+  type: text("type").notNull().$type<'totp' | 'sms' | 'email'>(),
+  secret: text("secret").notNull(), // Encrypted TOTP secret or phone/email
+  isEnabled: boolean("is_enabled").default(false),
+  backupCodes: jsonb("backup_codes"), // Encrypted backup codes
+  lastUsedAt: timestamp("last_used_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Password Reset Tokens
+export const passwordResetTokens = pgTable("password_reset_tokens", {
+  id: uuid("id").primaryKey(),
+  userId: uuid("user_id").references(() => profiles.id).notNull(),
+  token: text("token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  usedAt: timestamp("used_at"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Security Audit Logs
+export const securityAuditLogs = pgTable("security_audit_logs", {
+  id: uuid("id").primaryKey(),
+  userId: uuid("user_id").references(() => profiles.id),
+  sessionId: uuid("session_id").references(() => userSessions.id),
+  action: text("action").notNull(),
+  resource: text("resource"),
+  resourceId: text("resource_id"),
+  details: jsonb("details"),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  success: boolean("success").notNull(),
+  riskLevel: text("risk_level").$type<'low' | 'medium' | 'high' | 'critical'>().default('low'),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// Role Permissions
+export const rolePermissions = pgTable("role_permissions", {
+  id: uuid("id").primaryKey(),
+  role: text("role").notNull().$type<'technician' | 'supervisor' | 'manager' | 'admin' | 'inventory_clerk' | 'contractor' | 'requester'>(),
+  resource: text("resource").notNull(), // e.g., 'work_orders', 'equipment', 'parts'
+  action: text("action").notNull(), // e.g., 'create', 'read', 'update', 'delete'
+  allowed: boolean("allowed").notNull().default(false),
+  conditions: jsonb("conditions"), // Optional conditions for permission
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// API Rate Limiting
+export const rateLimits = pgTable("rate_limits", {
+  id: uuid("id").primaryKey(),
+  identifier: text("identifier").notNull(), // IP address or user ID
+  endpoint: text("endpoint").notNull(),
+  requestCount: integer("request_count").default(0),
+  windowStart: timestamp("window_start").defaultNow(),
+  blockedUntil: timestamp("blocked_until"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -226,6 +324,13 @@ export const jobQueue = pgTable("job_queue", {
 
 // Schema exports for forms
 export const insertProfileSchema = createInsertSchema(profiles);
+export const insertUserCredentialsSchema = createInsertSchema(userCredentials);
+export const insertUserSessionSchema = createInsertSchema(userSessions);
+export const insertUserMfaSchema = createInsertSchema(userMfa);
+export const insertPasswordResetTokenSchema = createInsertSchema(passwordResetTokens);
+export const insertSecurityAuditLogSchema = createInsertSchema(securityAuditLogs);
+export const insertRolePermissionSchema = createInsertSchema(rolePermissions);
+export const insertRateLimitSchema = createInsertSchema(rateLimits);
 
 export const insertWarehouseSchema = createInsertSchema(warehouses);
 
