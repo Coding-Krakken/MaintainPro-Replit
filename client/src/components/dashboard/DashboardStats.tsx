@@ -87,7 +87,7 @@ export default function DashboardStats() {
                 <p className={`text-sm mt-1 ${
                   stat.changeType === 'positive' ? 'text-success-600' :
                   stat.changeType === 'negative' ? 'text-error-600' :
-                  stat.changeType === 'warning' ? 'text-warning-600' :
+                  stat.changeType === 'neutral' ? 'text-gray-500' :
                   'text-gray-500'
                 }`}>
                   {stat.change}

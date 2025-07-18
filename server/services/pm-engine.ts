@@ -121,7 +121,6 @@ export class PMEngine {
       assetModel: equipment.model,
       status: 'new',
       priority: 'medium',
-      requestedBy: 'system-pm-engine', // System-generated
       equipmentId: equipment.id,
       dueDate: this.calculateNextDueDate(template.frequency),
       estimatedHours: '2.00', // Default estimate

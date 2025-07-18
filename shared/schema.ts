@@ -133,6 +133,8 @@ export const pmTemplates = pgTable("pm_templates", {
   model: text("model").notNull(),
   component: text("component").notNull(),
   action: text("action").notNull(),
+  description: text("description"),
+  estimatedDuration: integer("estimated_duration").default(60),
   frequency: text("frequency").notNull().$type<'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annually'>(),
   customFields: jsonb("custom_fields"),
   active: boolean("active").default(true),
@@ -201,6 +203,13 @@ export const insertWorkOrderSchema = createInsertSchema(workOrders, {
   notes: z.string().optional(),
   estimatedHours: z.string().optional(),
   actualHours: z.string().optional(),
+  requestedBy: z.string().uuid().optional(),
+  equipmentId: z.string().uuid().optional(),
+  warehouseId: z.string().uuid().optional(),
+  dueDate: z.union([z.string(), z.date()]).optional(),
+  escalated: z.boolean().optional(),
+  escalationLevel: z.number().optional(),
+  followUp: z.boolean().optional(),
 });
 
 export const insertPartSchema = createInsertSchema(parts);
@@ -209,10 +218,6 @@ export const insertPartSchema = createInsertSchema(parts);
 export const insertVendorSchema = createInsertSchema(vendors, {
   type: z.enum(['supplier', 'contractor']),
   name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email format').optional(),
-  phone: z.string().optional(),
-  address: z.string().optional(),
-  contactPerson: z.string().optional(),
 });
 
 export const insertPmTemplateSchema = createInsertSchema(pmTemplates);

@@ -569,6 +569,100 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Work Order Escalation
+  app.post("/api/work-orders/:id/escalate", authenticateRequest, async (req, res) => {
+    try {
+      const { escalateToUserId, reason } = req.body;
+      const escalatedByUserId = getCurrentUser(req);
+      
+      const { escalationEngine } = await import('./services/escalation-engine');
+      const action = await escalationEngine.manuallyEscalateWorkOrder(
+        req.params.id,
+        escalateToUserId,
+        reason,
+        escalatedByUserId
+      );
+      
+      if (!action) {
+        return res.status(400).json({ message: "Failed to escalate work order" });
+      }
+      
+      res.json(action);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to escalate work order" });
+    }
+  });
+
+  app.get("/api/escalation/stats/:warehouseId", authenticateRequest, async (req, res) => {
+    try {
+      const { escalationEngine } = await import('./services/escalation-engine');
+      const stats = await escalationEngine.getEscalationStats(req.params.warehouseId);
+      res.json(stats);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get escalation stats" });
+    }
+  });
+
+  app.get("/api/escalation/rules/:warehouseId", authenticateRequest, async (req, res) => {
+    try {
+      const { escalationEngine } = await import('./services/escalation-engine');
+      const rules = escalationEngine.getEscalationRules(req.params.warehouseId);
+      res.json(rules);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get escalation rules" });
+    }
+  });
+
+  app.put("/api/escalation/rules/:warehouseId", authenticateRequest, async (req, res) => {
+    try {
+      const { escalationEngine } = await import('./services/escalation-engine');
+      await escalationEngine.updateEscalationRules(req.params.warehouseId, req.body);
+      res.json({ message: "Escalation rules updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update escalation rules" });
+    }
+  });
+
+  // Background Jobs Management
+  app.get("/api/background-jobs", authenticateRequest, async (req, res) => {
+    try {
+      const { backgroundJobScheduler } = await import('./services/background-jobs');
+      const jobs = backgroundJobScheduler.getJobStatus();
+      res.json(jobs);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to get job status" });
+    }
+  });
+
+  app.post("/api/background-jobs/:jobId/run", authenticateRequest, async (req, res) => {
+    try {
+      const { backgroundJobScheduler } = await import('./services/background-jobs');
+      await backgroundJobScheduler.runJobManually(req.params.jobId);
+      res.json({ message: "Job executed successfully" });
+    } catch (error) {
+      res.status(500).json({ message: error.message || "Failed to run job" });
+    }
+  });
+
+  app.patch("/api/background-jobs/:jobId", authenticateRequest, async (req, res) => {
+    try {
+      const { backgroundJobScheduler } = await import('./services/background-jobs');
+      const { enabled, interval } = req.body;
+      
+      if (typeof enabled === 'boolean') {
+        backgroundJobScheduler.setJobEnabled(req.params.jobId, enabled);
+      }
+      
+      if (typeof interval === 'number') {
+        backgroundJobScheduler.updateJobInterval(req.params.jobId, interval);
+      }
+      
+      res.json({ message: "Job updated successfully" });
+    } catch (error) {
+      res.status(500).json({ message: "Failed to update job" });
+    }
+  });
+
   // Vendors
   app.get("/api/vendors", authenticateRequest, async (req, res) => {
     try {

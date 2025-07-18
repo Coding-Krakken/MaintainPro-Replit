@@ -398,6 +398,10 @@ export class DatabaseStorage implements IStorage {
     return updated;
   }
 
+  async deleteWorkOrder(id: string): Promise<void> {
+    await db.delete(workOrders).where(eq(workOrders.id, id));
+  }
+
   async getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]> {
     return await db.select().from(workOrders).where(eq(workOrders.assignedTo, userId));
   }
@@ -495,6 +499,18 @@ export class DatabaseStorage implements IStorage {
     };
     const [created] = await db.insert(vendors).values(newVendor).returning();
     return created;
+  }
+
+  async updateVendor(id: string, vendor: Partial<InsertVendor>): Promise<Vendor> {
+    const [updated] = await db.update(vendors)
+      .set(vendor as any)
+      .where(eq(vendors.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteVendor(id: string): Promise<void> {
+    await db.delete(vendors).where(eq(vendors.id, id));
   }
 
   // PM Templates

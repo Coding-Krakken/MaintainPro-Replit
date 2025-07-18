@@ -62,6 +62,7 @@ export interface IStorage {
   getWorkOrder(id: string): Promise<WorkOrder | undefined>;
   createWorkOrder(workOrder: InsertWorkOrder): Promise<WorkOrder>;
   updateWorkOrder(id: string, workOrder: Partial<InsertWorkOrder>): Promise<WorkOrder>;
+  deleteWorkOrder(id: string): Promise<void>;
   getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]>;
   
   // Work Order Checklist Items
@@ -83,6 +84,8 @@ export interface IStorage {
   getVendors(warehouseId: string): Promise<Vendor[]>;
   getVendor(id: string): Promise<Vendor | undefined>;
   createVendor(vendor: InsertVendor): Promise<Vendor>;
+  updateVendor(id: string, vendor: Partial<InsertVendor>): Promise<Vendor>;
+  deleteVendor(id: string): Promise<void>;
   
   // PM Templates
   getPmTemplates(warehouseId: string): Promise<PmTemplate[]>;
@@ -465,6 +468,8 @@ export class MemStorage implements IStorage {
       model: "Pump Model A",
       component: "Oil Filter",
       action: "Replace oil filter and check for leaks",
+      description: "Monthly oil filter replacement for Pump Model A",
+      estimatedDuration: 45,
       frequency: "monthly",
       customFields: { oilType: "10W-30", filterSize: "Standard" },
       active: true,
@@ -478,6 +483,8 @@ export class MemStorage implements IStorage {
       model: "Pump Model A",
       component: "Belt",
       action: "Inspect belt tension and alignment",
+      description: "Weekly belt inspection for Pump Model A",
+      estimatedDuration: 30,
       frequency: "weekly",
       customFields: { beltType: "V-Belt", tension: "Medium" },
       active: true,
@@ -491,6 +498,8 @@ export class MemStorage implements IStorage {
       model: "Conveyor System",
       component: "Bearings",
       action: "Lubricate bearings and check for wear",
+      description: "Monthly bearing maintenance for Conveyor System",
+      estimatedDuration: 60,
       frequency: "monthly",
       customFields: { lubricant: "Multi-purpose grease" },
       active: true,
@@ -629,13 +638,25 @@ export class MemStorage implements IStorage {
     const existing = this.workOrders.get(id);
     if (!existing) throw new Error('Work order not found');
     
+    // Convert dueDate string to Date if needed
+    const processedUpdates: any = { ...updateWorkOrder };
+    if (processedUpdates.dueDate && typeof processedUpdates.dueDate === 'string') {
+      processedUpdates.dueDate = new Date(processedUpdates.dueDate);
+    }
+    
     const updated: WorkOrder = { 
       ...existing, 
-      ...updateWorkOrder,
+      ...processedUpdates,
       updatedAt: new Date(),
     };
     this.workOrders.set(id, updated);
     return updated;
+  }
+
+  async deleteWorkOrder(id: string): Promise<void> {
+    const existing = this.workOrders.get(id);
+    if (!existing) throw new Error('Work order not found');
+    this.workOrders.delete(id);
   }
 
   async getWorkOrdersByAssignee(userId: string): Promise<WorkOrder[]> {
@@ -741,6 +762,24 @@ export class MemStorage implements IStorage {
     };
     this.vendors.set(id, vendor);
     return vendor;
+  }
+
+  async updateVendor(id: string, updateVendor: Partial<InsertVendor>): Promise<Vendor> {
+    const existing = this.vendors.get(id);
+    if (!existing) throw new Error('Vendor not found');
+    
+    const updated: Vendor = { 
+      ...existing, 
+      ...updateVendor,
+    };
+    this.vendors.set(id, updated);
+    return updated;
+  }
+
+  async deleteVendor(id: string): Promise<void> {
+    const existing = this.vendors.get(id);
+    if (!existing) throw new Error('Vendor not found');
+    this.vendors.delete(id);
   }
 
   // PM Template methods

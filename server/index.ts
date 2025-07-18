@@ -5,6 +5,7 @@ import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { pmScheduler } from "./services/pm-scheduler";
+import { backgroundJobScheduler } from "./services/background-jobs";
 
 const app = express();
 app.use(express.json());
@@ -42,6 +43,9 @@ app.use((req, res, next) => {
 
 // Start PM scheduler
 pmScheduler.start();
+
+// Start background job scheduler
+backgroundJobScheduler.startAll();
 
 // Initialize the app
 async function initializeApp() {
@@ -101,6 +105,7 @@ if (process.env.NODE_ENV !== 'test') {
     // Graceful shutdown handling
     process.on('SIGTERM', () => {
       log('SIGTERM received, shutting down gracefully');
+      backgroundJobScheduler.stopAll();
       httpServer.close(() => {
         log('HTTP server closed');
         process.exit(0);
@@ -109,6 +114,7 @@ if (process.env.NODE_ENV !== 'test') {
 
     process.on('SIGINT', () => {
       log('SIGINT received, shutting down gracefully');
+      backgroundJobScheduler.stopAll();
       httpServer.close(() => {
         log('HTTP server closed');
         process.exit(0);
