@@ -115,7 +115,8 @@
     "zod": "^3.24.2",
     "zod-validation-error": "^3.4.0",
     "zxcvbn": "^4.4.2",
-    "tsx": "^4.19.1"
+    "tsx": "^4.19.1",
+    "@radix-ui/react-slider": "^1.2.4"
   },
   "devDependencies": {
     "@playwright/test": "^1.41.0",
